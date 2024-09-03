@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.TWarningUserMapper">
+    
+    <resultMap type="com.tianji.dam.domain.TWarningUser" id="TWarningUserResult">
+        <result property="userGid"    column="user_gid"    />
+        <result property="referenceid"    column="referenceid"    />
+        <result property="name"    column="name"    />
+        <result property="tel"    column="tel"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="freedom1"    column="freedom1"    />
+        <result property="freedom2"    column="freedom2"    />
+        <result property="freedom3"    column="freedom3"    />
+        <result property="freedom4"    column="freedom4"    />
+        <result property="freedom5"    column="freedom5"    />
+    </resultMap>
+
+    <sql id="selectTWarningUserVo">
+        select user_gid, referenceid, name, tel, status, create_by, create_time, freedom1, freedom2, freedom3, freedom4, freedom5 from t_warning_user
+    </sql>
+    <select id="selectuserlist" resultMap="TWarningUserResult">
+        select name, tel from t_warning_user where status =0
+    </select>
+    <select id="selectTWarningUserList" parameterType="com.tianji.dam.domain.TWarningUser" resultMap="TWarningUserResult">
+        <include refid="selectTWarningUserVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="tel != null  and tel != ''"> and tel = #{tel}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="freedom1 != null  and freedom1 != ''"> and freedom1 = #{freedom1}</if>
+            <if test="freedom2 != null  and freedom2 != ''"> and freedom2 = #{freedom2}</if>
+            <if test="freedom3 != null  and freedom3 != ''"> and freedom3 = #{freedom3}</if>
+            <if test="freedom3 != null and freedom3 != ''">
+                <if test="freedom3 == 1">
+                    and (freedom3 = 1 or freedom3 is null)
+                </if>
+                <if test="freedom3 != 1">
+                    and freedom3 = #{freedom3}
+                </if>
+            </if>
+
+
+
+            <if test="freedom4 != null  and freedom4 != ''"> and freedom4 = #{freedom4}</if>
+            <if test="freedom5 != null  and freedom5 != ''"> and freedom5 = #{freedom5}</if>
+        </where>
+    </select>
+    
+    <select id="selectTWarningUserByUserGid" parameterType="String" resultMap="TWarningUserResult">
+        <include refid="selectTWarningUserVo"/>
+        where user_gid = #{userGid}
+    </select>
+        
+    <insert id="insertTWarningUser" parameterType="com.tianji.dam.domain.TWarningUser">
+        insert into t_warning_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userGid != null">user_gid,</if>
+            <if test="referenceid != null">referenceid,</if>
+            <if test="name != null">name,</if>
+            <if test="tel != null">tel,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="freedom1 != null">freedom1,</if>
+            <if test="freedom2 != null">freedom2,</if>
+            <if test="freedom3 != null">freedom3,</if>
+            <if test="freedom4 != null">freedom4,</if>
+            <if test="freedom5 != null">freedom5,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userGid != null">#{userGid},</if>
+            <if test="referenceid != null">#{referenceid},</if>
+            <if test="name != null">#{name},</if>
+            <if test="tel != null">#{tel},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="freedom1 != null">#{freedom1},</if>
+            <if test="freedom2 != null">#{freedom2},</if>
+            <if test="freedom3 != null">#{freedom3},</if>
+            <if test="freedom4 != null">#{freedom4},</if>
+            <if test="freedom5 != null">#{freedom5},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTWarningUser" parameterType="com.tianji.dam.domain.TWarningUser">
+        update t_warning_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="referenceid != null">referenceid = #{referenceid},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="tel != null">tel = #{tel},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="freedom1 != null">freedom1 = #{freedom1},</if>
+            <if test="freedom2 != null">freedom2 = #{freedom2},</if>
+            <if test="freedom3 != null">freedom3 = #{freedom3},</if>
+            <if test="freedom4 != null">freedom4 = #{freedom4},</if>
+            <if test="freedom5 != null">freedom5 = #{freedom5},</if>
+        </trim>
+        where user_gid = #{userGid}
+    </update>
+
+    <delete id="deleteTWarningUserByUserGid" parameterType="String">
+        delete from t_warning_user where user_gid = #{userGid}
+    </delete>
+
+    <delete id="deleteTWarningUserByUserGids" parameterType="String">
+        delete from t_warning_user where user_gid in 
+        <foreach item="userGid" collection="array" open="(" separator="," close=")">
+            #{userGid}
+        </foreach>
+    </delete>
+</mapper>

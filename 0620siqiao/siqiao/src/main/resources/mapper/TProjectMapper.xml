@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.TProjectMapper">
+
+    <!--查询-->
+    <select id="select" parameterType="com.tianji.dam.domain.TProject" resultType="com.tianji.dam.domain.TProject">
+        select
+        id as id,
+        name as name,
+        logo as logo,
+        unit_name as unitName,
+        address as address,
+        description as description,
+        code as code,
+        zhuang_x as zhuangX,
+        zhuang_y as zhuangY,
+        owner_unit as ownerUnit,
+        sg_unit as sgUnit,
+        jl_unit as jlUnit,
+        design_unit as designUnit,
+        plan_start_date as planStartDate,
+        plan_end_date as planEndDate,
+        real_start_date as realStartDate,
+        real_end_date as realEndDate,
+        remarks as remarks,
+        protype as protype,
+        begin_evolution ,
+        end_evolution
+        from t_project where 1=1
+        <include refid="where"/>
+    </select>
+    <sql id="where">
+        <if test="id != null and id != 0 ">AND id = #{id}</if>
+        <if test="name != null and name != '' ">AND name like concat('%', #{name}, '%')</if>
+        <if test="address != null and address != '' ">AND address like concat('%', #{address}, '%')</if>
+        <if test="description != null and description != '' ">AND description = #{description}</if>
+        <if test="code != null and code != '' ">AND code = #{code}</if>
+        <if test="zhuangX != null ">AND zhuang_x = #{zhuangX}</if>
+        <if test="zhuangY != null ">AND zhuang_y = #{zhuangY}</if>
+        <if test="ownerUnit != null and ownerUnit != '' ">AND owner_unit = #{ownerUnit}</if>
+        <if test="sgUnit != null and sgUnit != '' ">AND sg_unit = #{sgUnit}</if>
+        <if test="jlUnit != null and jlUnit != '' ">AND jl_unit = #{jlUnit}</if>
+        <if test="designUnit != null and designUnit != '' ">AND design_unit = #{designUnit}</if>
+        <if test="planStartDate != null ">AND date_format(plan_start_date,'%Y-%m-%d') = #{planStartDate}</if>
+        <if test="planEndDate != null ">AND date_format(plan_end_date,'%Y-%m-%d') = #{planEndDate}</if>
+        <if test="realStartDate != null ">AND date_format(real_start_date,'%Y-%m-%d') = #{realStartDate}</if>
+        <if test="realEndDate != null ">AND date_format(real_end_date,'%Y-%m-%d') = #{realEndDate}</if>
+        <if test="remarks != null and remarks != ''">AND remarks = #{remarks}</if>
+    </sql>
+
+    <!--添加-->
+    <insert id="insert" parameterType="com.tianji.dam.domain.TProject" useGeneratedKeys="true" keyProperty="id">
+        insert into t_project (
+        <if test="name != null and name != '' ">name,</if>
+        <if test="logo != null and logo != '' ">logo,</if>
+        <if test="unitName != null and unitName != '' ">unit_name,</if>
+        <if test="address != null and address != '' ">address,</if>
+        <if test="description != null and description != '' ">description,</if>
+        <if test="code != null and code != '' ">code,</if>
+        <if test="zhuangX != null ">zhuang_x,</if>
+        <if test="zhuangY != null ">zhuang_y,</if>
+        <if test="ownerUnit != null and ownerUnit != '' ">owner_unit,</if>
+        <if test="sgUnit != null and sgUnit != '' ">sg_unit,</if>
+        <if test="jlUnit != null and jlUnit != '' ">jl_unit,</if>
+        <if test="designUnit != null and designUnit != '' ">design_unit,</if>
+        <if test="planStartDate != null ">plan_start_date,</if>
+        <if test="planEndDate != null ">plan_end_date,</if>
+        <if test="realStartDate != null ">real_start_date,</if>
+        <if test="realEndDate != null ">real_end_date,</if>
+        <if test="remarks != null and remarks != '' ">remarks,</if>
+        <if test="protype != null and protype != '' ">protype,</if>
+
+        )values(
+        <if test="name != null and name != '' ">#{name},</if>
+         <if test="logo != null and logo != '' ">#{logo},</if>
+        <if test="unitName != null and unitName != '' ">#{unit_name},</if>
+        <if test="address != null and address != '' ">#{address},</if>
+        <if test="description != null and description != '' ">#{description},</if>
+        <if test="code != null and code != '' ">#{code},</if>
+        <if test="zhuangX != null ">#{zhuangX},</if>
+        <if test="zhuangY != null ">#{zhuangY},</if>
+        <if test="ownerUnit != null and ownerUnit != '' ">#{ownerUnit},</if>
+        <if test="sgUnit != null and sgUnit != '' ">#{sgUnit},</if>
+        <if test="jlUnit != null and jlUnit != '' ">#{jlUnit},</if>
+        <if test="designUnit != null and designUnit != '' ">#{designUnit},</if>
+        <if test="planStartDate != null ">#{planStartDate},</if>
+        <if test="planEndDate != null ">#{planEndDate},</if>
+        <if test="realStartDate != null ">#{realStartDate},</if>
+        <if test="realEndDate != null ">#{realEndDate},</if>
+        <if test="remarks != null and remarks != ''">#{remarks},</if>
+        <if test="protype != null and protype != ''">#{protype},</if>
+        )
+    </insert>
+    <!--修改-->
+    <update id="update" parameterType="com.tianji.dam.domain.TProject">
+        update t_project
+        <set>
+            <if test="name != null and name != '' ">name = #{name},</if>
+            <if test="logo != null and logo != '' ">logo = #{logo},</if>
+            <if test="unitName != null and unitName != '' ">unit_name = #{unitName},</if>
+            <if test="address != null and address != '' ">address = #{address},</if>
+            <if test="description != null and description != '' ">description = #{description},</if>
+            <if test="code != null and code != '' ">code = #{code},</if>
+            <if test="zhuangX != null ">zhuang_x = #{zhuangX},</if>
+            <if test="zhuangY != null ">zhuang_y = #{zhuangY},</if>
+            <if test="ownerUnit != null and ownerUnit != '' ">owner_unit = #{ownerUnit},</if>
+            <if test="sgUnit != null and sgUnit != '' ">sg_unit = #{sgUnit},</if>
+            <if test="jlUnit != null and jlUnit != '' ">jl_unit = #{jlUnit},</if>
+            <if test="designUnit != null and designUnit != '' ">design_unit = #{designUnit},</if>
+            <if test="planStartDate != null ">plan_start_date = #{planStartDate},</if>
+            <if test="planEndDate != null ">plan_end_date = #{planEndDate},</if>
+            <if test="realStartDate != null ">real_start_date = #{realStartDate},</if>
+            <if test="realEndDate != null ">real_end_date = #{realEndDate},</if>
+            <if test="remarks != null and remarks != ''">remarks = #{remarks},</if>
+            <if test="protype != null and protype != ''">protype = #{protype},</if>
+            <if test="begin_evolution != null and begin_evolution != ''">begin_evolution = #{begin_evolution},</if>
+            <if test="end_evolution != null and end_evolution != ''">end_evolution = #{end_evolution},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--删除-->
+    <delete id="delete" parameterType="Long">
+        delete from t_project where id = #{id}
+    </delete>
+    <!--批量删除-->
+    <delete id="deletes" parameterType="Long">
+        delete from t_project where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

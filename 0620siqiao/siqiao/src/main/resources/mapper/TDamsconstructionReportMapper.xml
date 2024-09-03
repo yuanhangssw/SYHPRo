@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.TDamsconstructionReportMapper">
+    
+    <resultMap type="com.tianji.dam.domain.TDamsconstructionReport" id="TDamsconstructionReportResult">
+        <result property="gid"    column="gid"    />
+        <result property="title"    column="title"    />
+        <result property="type"    column="type"    />
+        <result property="damgid"    column="damgid"    />
+        <result property="reportTime"    column="report_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="reportPath"    column="report_path"    />
+        <result property="delflag"    column="delflag"    />
+        <result property="freedom1"    column="freedom1"    />
+        <result property="freedom2"    column="freedom2"    />
+        <result property="freedom3"    column="freedom3"    />
+        <result property="freedom4"    column="freedom4"    />
+        <result property="freedom5"    column="freedom5"    />
+    </resultMap>
+
+    <resultMap id="TDamsconstructionReportTDamsconstrctionReportDetailResult" type="com.tianji.dam.domain.TDamsconstructionReport" extends="TDamsconstructionReportResult">
+        <collection property="tDamsconstrctionReportDetailList" notNullColumn="sub_gid" javaType="java.util.List" resultMap="TDamsconstrctionReportDetailResult" />
+    </resultMap>
+
+    <resultMap type="com.tianji.dam.domain.TDamsconstrctionReportDetail" id="TDamsconstrctionReportDetailResult">
+        <result property="gid"    column="sub_gid"    />
+        <result property="reportGid"    column="sub_report_gid"    />
+        <result property="sno"    column="sub_sno"    />
+        <result property="ranges" column="ranges"/>
+        <result property="checkTime"    column="sub_check_time"    />
+        <result property="param1"    column="sub_param1"    />
+        <result property="param2"    column="sub_param2"    />
+        <result property="param3"    column="sub_param3"    />
+        <result property="param4"    column="sub_param4"    />
+        <result property="param5"    column="sub_param5"    />
+        <result property="delflag"    column="sub_delflag"    />
+    </resultMap>
+
+    <sql id="selectTDamsconstructionReportVo">
+        select gid, title, type, damgid, report_time, create_time, create_by, report_path, delflag, freedom1, freedom2, freedom3, freedom4, freedom5 from t_damsconstruction_report
+    </sql>
+
+    <select id="selectTDamsconstructionReportList" parameterType="com.tianji.dam.domain.TDamsconstructionReport" resultMap="TDamsconstructionReportResult">
+        <include refid="selectTDamsconstructionReportVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="damgid != null "> and damgid = #{damgid}</if>
+        </where>
+    </select>
+    
+    <select id="selectTDamsconstructionReportByGid" parameterType="Long" resultMap="TDamsconstructionReportTDamsconstrctionReportDetailResult">
+        select a.gid, a.title, a.type, a.damgid, a.report_time, a.create_time, a.create_by, a.report_path, a.delflag, a.freedom1, a.freedom2, a.freedom3, a.freedom4, a.freedom5,
+ b.gid as sub_gid, b.report_gid as sub_report_gid, b.sno as sub_sno,b.ranges as ranges, b.check_time as sub_check_time, b.param1 as sub_param1, b.param2 as sub_param2, b.param3 as sub_param3, b.param4 as sub_param4, b.param5 as sub_param5, b.delflag as sub_delflag
+        from t_damsconstruction_report a
+        left join t_damsconstrction_report_detail b on b.report_gid = a.gid
+        where a.gid = #{gid}
+    </select>
+        
+    <insert id="insertTDamsconstructionReport" parameterType="com.tianji.dam.domain.TDamsconstructionReport" useGeneratedKeys="true" keyProperty="gid">
+        insert into t_damsconstruction_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="type != null">type,</if>
+            <if test="damgid != null">damgid,</if>
+            <if test="reportTime != null">report_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="reportPath != null">report_path,</if>
+            <if test="delflag != null">delflag,</if>
+            <if test="freedom1 != null">freedom1,</if>
+            <if test="freedom2 != null">freedom2,</if>
+            <if test="freedom3 != null">freedom3,</if>
+            <if test="freedom4 != null">freedom4,</if>
+            <if test="freedom5 != null">freedom5,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="type != null">#{type},</if>
+            <if test="damgid != null">#{damgid},</if>
+            <if test="reportTime != null">#{reportTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="reportPath != null">#{reportPath},</if>
+            <if test="delflag != null">#{delflag},</if>
+            <if test="freedom1 != null">#{freedom1},</if>
+            <if test="freedom2 != null">#{freedom2},</if>
+            <if test="freedom3 != null">#{freedom3},</if>
+            <if test="freedom4 != null">#{freedom4},</if>
+            <if test="freedom5 != null">#{freedom5},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTDamsconstructionReport" parameterType="com.tianji.dam.domain.TDamsconstructionReport">
+        update t_damsconstruction_report
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="damgid != null">damgid = #{damgid},</if>
+            <if test="reportTime != null">report_time = #{reportTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="reportPath != null">report_path = #{reportPath},</if>
+            <if test="delflag != null">delflag = #{delflag},</if>
+            <if test="freedom1 != null">freedom1 = #{freedom1},</if>
+            <if test="freedom2 != null">freedom2 = #{freedom2},</if>
+            <if test="freedom3 != null">freedom3 = #{freedom3},</if>
+            <if test="freedom4 != null">freedom4 = #{freedom4},</if>
+            <if test="freedom5 != null">freedom5 = #{freedom5},</if>
+        </trim>
+        where gid = #{gid}
+    </update>
+
+    <delete id="deleteTDamsconstructionReportByGid" parameterType="Long">
+        delete from t_damsconstruction_report where gid = #{gid}
+    </delete>
+
+    <delete id="deleteTDamsconstructionReportByGids" parameterType="String">
+        delete from t_damsconstruction_report where gid in 
+        <foreach item="gid" collection="array" open="(" separator="," close=")">
+            #{gid}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteTDamsconstrctionReportDetailByReportGids" parameterType="String">
+        delete from t_damsconstrction_report_detail where report_gid in 
+        <foreach item="reportGid" collection="array" open="(" separator="," close=")">
+            #{reportGid}
+        </foreach>
+    </delete>
+
+    <delete id="deleteTDamsconstrctionReportDetailByReportGid" parameterType="Long">
+        delete from t_damsconstrction_report_detail where report_gid = #{reportGid}
+    </delete>
+
+    <insert id="batchTDamsconstrctionReportDetail">
+        insert into t_damsconstrction_report_detail( report_gid, sno, ranges,check_time, param1, param2, param3, param4,
+        param5, delflag) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.reportGid}, #{item.sno},#{item.ranges}, #{item.checkTime}, #{item.param1}, #{item.param2},
+            #{item.param3}, #{item.param4}, #{item.param5}, #{item.delflag})
+        </foreach>
+    </insert>
+</mapper>

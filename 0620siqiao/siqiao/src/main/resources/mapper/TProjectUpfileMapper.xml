@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.TProjectUpfileMapper">
+    
+    <resultMap type="com.tianji.dam.domain.TProjectUpfile" id="TProjectUpfileResult">
+        <result property="gid"    column="gid"    />
+        <result property="projectid"    column="projectid"    />
+        <result property="filename"    column="filename"    />
+        <result property="filepath"    column="filepath"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="delflag"    column="delflag"    />
+        <result property="freedom1"    column="freedom1"    />
+        <result property="freedom2"    column="freedom2"    />
+        <result property="freedom3"    column="freedom3"    />
+        <result property="freedom4"    column="freedom4"    />
+        <result property="freedom5"    column="freedom5"    />
+    </resultMap>
+
+    <sql id="selectTProjectUpfileVo">
+        select gid, projectid, filename, filepath, create_time, create_by, delflag, freedom1, freedom2, freedom3, freedom4, freedom5 from t_project_upfile
+    </sql>
+
+    <select id="selectTProjectUpfileList" parameterType="com.tianji.dam.domain.TProjectUpfile" resultMap="TProjectUpfileResult">
+        <include refid="selectTProjectUpfileVo"/>
+        <where>  
+            <if test="projectid != null "> and projectid = #{projectid}</if>
+            <if test="filename != null  and filename != ''"> and filename like concat('%', #{filename}, '%')</if>
+            <if test="delflag!=null">and delflag=#{delflag}</if>
+        </where>
+    </select>
+    
+    <select id="selectTProjectUpfileByGid" parameterType="Long" resultMap="TProjectUpfileResult">
+        <include refid="selectTProjectUpfileVo"/>
+        where gid = #{gid}
+    </select>
+        
+    <insert id="insertTProjectUpfile" parameterType="com.tianji.dam.domain.TProjectUpfile">
+        insert into t_project_upfile
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="projectid != null">projectid,</if>
+            <if test="filename != null">filename,</if>
+            <if test="filepath != null">filepath,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="delflag != null">delflag,</if>
+            <if test="freedom1 != null">freedom1,</if>
+            <if test="freedom2 != null">freedom2,</if>
+            <if test="freedom3 != null">freedom3,</if>
+            <if test="freedom4 != null">freedom4,</if>
+            <if test="freedom5 != null">freedom5,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+
+            <if test="projectid != null">#{projectid},</if>
+            <if test="filename != null">#{filename},</if>
+            <if test="filepath != null">#{filepath},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="delflag != null">#{delflag},</if>
+            <if test="freedom1 != null">#{freedom1},</if>
+            <if test="freedom2 != null">#{freedom2},</if>
+            <if test="freedom3 != null">#{freedom3},</if>
+            <if test="freedom4 != null">#{freedom4},</if>
+            <if test="freedom5 != null">#{freedom5},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTProjectUpfile" parameterType="com.tianji.dam.domain.TProjectUpfile">
+        update t_project_upfile
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectid != null">projectid = #{projectid},</if>
+            <if test="filename != null">filename = #{filename},</if>
+            <if test="filepath != null">filepath = #{filepath},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="delflag != null">delflag = #{delflag},</if>
+            <if test="freedom1 != null">freedom1 = #{freedom1},</if>
+            <if test="freedom2 != null">freedom2 = #{freedom2},</if>
+            <if test="freedom3 != null">freedom3 = #{freedom3},</if>
+            <if test="freedom4 != null">freedom4 = #{freedom4},</if>
+            <if test="freedom5 != null">freedom5 = #{freedom5}</if>
+        </trim>
+        where gid = #{gid}
+    </update>
+
+    <delete id="deleteTProjectUpfileByGid" parameterType="Long">
+        update t_project_upfile  set delflag='Y' where gid = #{gid}
+    </delete>
+
+    <delete id="deleteTProjectUpfileByGids" parameterType="String">
+        update t_project_upfile  set delflag='Y' where gid in
+        <foreach item="gid" collection="array" open="(" separator="," close=")">
+            #{gid}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.THistoryPicMapper">
+
+    <resultMap type="com.tianji.dam.domain.THistoryPic" id="THistoryPicResult">
+        <result property="id" column="id"/>
+        <result property="damid" column="damid"/>
+        <result property="htype" column="htype"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time"/>
+        <result property="freedom1" column="freedom1"/>
+        <result property="freedom2" column="freedom2"/>
+        <result property="freedom3" column="freedom3"/>
+    </resultMap>
+
+    <sql id="selectTHistoryPicVo">
+        select id, damid, htype, content, create_time, freedom1, freedom2, freedom3 from t_history_pic
+    </sql>
+
+    <select id="selectTHistoryPicList" parameterType="com.tianji.dam.domain.THistoryPic" resultMap="THistoryPicResult">
+        <include refid="selectTHistoryPicVo"/>
+        <where>
+            <if test="damid != null ">and damid = #{damid}</if>
+            <if test="htype != null ">and htype = #{htype}</if>
+            <if test="content != null  and content != ''">and content = #{content}</if>
+            <if test="freedom1 != null  and freedom1 != ''">and freedom1 = #{freedom1}</if>
+            <if test="freedom2 != null  and freedom2 != ''">and freedom2 = #{freedom2}</if>
+            <if test="freedom3 != null  and freedom3 != ''">and freedom3 = #{freedom3}</if>
+        </where>
+    </select>
+
+    <select id="selectTHistoryPicById" parameterType="Long" resultMap="THistoryPicResult">
+        <include refid="selectTHistoryPicVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTHistoryPic" parameterType="com.tianji.dam.domain.THistoryPic" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_history_pic
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="damid != null">damid,</if>
+            <if test="htype != null">htype,</if>
+            <if test="content != null">content,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="freedom1 != null">freedom1,</if>
+            <if test="freedom2 != null">freedom2,</if>
+            <if test="freedom3 != null">freedom3,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="damid != null">#{damid},</if>
+            <if test="htype != null">#{htype},</if>
+            <if test="content != null">#{content},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="freedom1 != null">#{freedom1},</if>
+            <if test="freedom2 != null">#{freedom2},</if>
+            <if test="freedom3 != null">#{freedom3},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTHistoryPic" parameterType="com.tianji.dam.domain.THistoryPic">
+        update t_history_pic
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="damid != null">damid = #{damid},</if>
+            <if test="htype != null">htype = #{htype},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="freedom1 != null">freedom1 = #{freedom1},</if>
+            <if test="freedom2 != null">freedom2 = #{freedom2},</if>
+            <if test="freedom3 != null">freedom3 = #{freedom3},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTHistoryPicById" parameterType="Long">
+        delete from t_history_pic where id = #{id}
+    </delete>
+
+    <delete id="deleteTHistoryPicByDamAndType">
+        delete from t_history_pic where damid = #{param1} and htype=#{param2}
+    </delete>
+
+    <delete id="deleteTHistoryPicByIds" parameterType="String">
+        delete from t_history_pic where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

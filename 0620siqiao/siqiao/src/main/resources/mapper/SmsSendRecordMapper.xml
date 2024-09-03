@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.SmsSendRecordMapper">
+
+    <resultMap type="com.tianji.dam.domain.SmsSendRecord" id="SmsSendRecordResult">
+        <result property="gid" column="gid"/>
+        <result property="smsTel" column="sms_tel"/>
+        <result property="telUser" column="tel_user"/>
+        <result property="carName" column="car_name"/>
+        <result property="currentValue" column="current_value"/>
+        <result property="normalValue" column="normal_value"/>
+        <result property="damGid" column="dam_gid"/>
+        <result property="freedom1" column="freedom1"/>
+        <result property="freedom2" column="freedom2"/>
+        <result property="createTime" column="create_time"/>
+        <result property="freedom3" column="freedom3"/>
+        <result property="freedom4" column="freedom4"/>
+
+    </resultMap>
+
+    <sql id="selectSmsSendRecordVo">
+        select a.gid, a.sms_tel, a.tel_user, a.car_name, a.current_value, a.normal_value, a.dam_gid,td.title,
+        a.freedom1, a.freedom2, a.create_time,a.freedom3 from t_sms_send_record a
+    </sql>
+
+    <select id="selectSmsSendRecordList" parameterType="com.tianji.dam.domain.SmsSendRecord"
+            resultMap="SmsSendRecordResult">
+        <include refid="selectSmsSendRecordVo"/>
+        left join t_damsconstruction td on a.dam_gid =td.id
+        <where>
+            <if test="smsTel != null  and smsTel != ''">and a.sms_tel = #{smsTel}</if>
+            <if test="smsTel != null  and smsTel != ''">and a.sms_tel = #{smsTel}</if>
+            <if test="telUser != null  and telUser != ''">and a.tel_user = #{telUser}</if>
+            <if test="carName != null  and carName != ''">and a.car_name like concat('%', #{carName}, '%')</if>
+            <if test="currentValue != null  and currentValue != ''">and a.current_value = #{currentValue}</if>
+            <if test="normalValue != null ">and a.normal_value = #{normalValue}</if>
+            <if test="damGid != null ">and a.dam_gid = #{damGid}</if>
+            <if test="freedom1 != null  and freedom1 != ''">and a.freedom1 = #{freedom1}</if>
+            <if test="freedom2!=null and freedom2 !=''">and td.pid = #{freedom2}</if>
+            <if test="freedom4!=null and freedom4 !=''">and a.freedom4 = #{freedom4}</if>
+            <if test="ceng!=null and ceng !=''">and td.engcode = #{ceng}</if>
+            <if test="createTime != null ">and create_time = #{createTime}</if>
+            <if test="begintime != null  and begintime!=''">and a.create_time &gt; #{begintime}</if>
+            <if test="endtime != null  and endtime!=''">and a.create_time &lt; #{endtime}</if>
+            <if test="freedom3 != null and freedom3 != ''">
+                <if test="freedom3 == 1">
+                    and (a.freedom3 = 1 or a.freedom3 is null)
+                </if>
+                <if test="freedom3 != 1">
+                    and a.freedom3 = #{freedom3}
+                </if>
+            </if>
+
+
+        </where>
+    </select>
+
+    <select id="selectSmsSendRecordByGid" parameterType="Long" resultMap="SmsSendRecordResult">
+        <include refid="selectSmsSendRecordVo"/>
+        where gid = #{gid}
+    </select>
+
+    <insert id="insertSmsSendRecord" parameterType="com.tianji.dam.domain.SmsSendRecord" useGeneratedKeys="true"
+            keyProperty="gid">
+        insert into t_sms_send_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="smsTel != null">sms_tel,</if>
+            <if test="telUser != null">tel_user,</if>
+            <if test="carName != null">car_name,</if>
+            <if test="currentValue != null">current_value,</if>
+            <if test="normalValue != null">normal_value,</if>
+            <if test="damGid != null">dam_gid,</if>
+            <if test="freedom1 != null">freedom1,</if>
+            <if test="freedom2 != null">freedom2,</if>
+            <if test="freedom3 != null">freedom3,</if>
+            <if test="freedom4 != null">freedom4,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="smsTel != null">#{smsTel},</if>
+            <if test="telUser != null">#{telUser},</if>
+            <if test="carName != null">#{carName},</if>
+            <if test="currentValue != null">#{currentValue},</if>
+            <if test="normalValue != null">#{normalValue},</if>
+            <if test="damGid != null">#{damGid},</if>
+            <if test="freedom1 != null">#{freedom1},</if>
+            <if test="freedom2 != null">#{freedom2},</if>
+            <if test="freedom3 != null">#{freedom3},</if>
+            <if test="freedom4 != null">#{freedom4},</if>
+            <if test="createTime != null">now(),</if>
+        </trim>
+    </insert>
+
+    <update id="updateSmsSendRecord" parameterType="com.tianji.dam.domain.SmsSendRecord">
+        update t_sms_send_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="smsTel != null">sms_tel = #{smsTel},</if>
+            <if test="telUser != null">tel_user = #{telUser},</if>
+            <if test="carName != null">car_name = #{carName},</if>
+            <if test="currentValue != null">current_value = #{currentValue},</if>
+            <if test="normalValue != null">normal_value = #{normalValue},</if>
+            <if test="damGid != null">dam_gid = #{damGid},</if>
+            <if test="freedom1 != null">freedom1 = #{freedom1},</if>
+            <if test="freedom2 != null">freedom2 = #{freedom2},</if>
+            <if test="freedom3 != null">freedom3 = #{freedom3},</if>
+            <if test="freedom4 != null">freedom4 = #{freedom4},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where gid = #{gid}
+    </update>
+
+    <delete id="deleteSmsSendRecordByGid" parameterType="Long">
+        delete from t_sms_send_record where gid = #{gid}
+    </delete>
+
+    <delete id="deleteSmsSendRecordByGids" parameterType="String">
+        delete from t_sms_send_record where gid in
+        <foreach item="gid" collection="array" open="(" separator="," close=")">
+            #{gid}
+        </foreach>
+    </delete>
+</mapper>

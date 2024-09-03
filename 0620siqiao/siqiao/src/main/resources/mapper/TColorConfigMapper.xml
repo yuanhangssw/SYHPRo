@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.TColorConfigMapper">
+
+    <!--查询-->
+    <select id="select" parameterType="com.tianji.dam.domain.TColorConfig" resultType="com.tianji.dam.domain.TColorConfig">
+        select
+        id as id,
+        `level` as level,
+        num as num,
+        `c` as c,
+        d as d,
+        `type` as type,
+        color as color,
+        plain  as plain
+        from t_color_config where 1=1
+        <include refid="where"/>
+        ORDER BY level ASC
+    </select>
+    <sql id="where">
+        <if test="id != null and id != 0 ">AND id = #{id}</if>
+        <if test="level != null">AND `level` = #{level} </if>
+        <if test="num != null">AND num = #{num}  </if>
+        <if test="c != null ">AND `c` = #{c}</if>
+        <if test="d != null">AND d = #{d}</if>
+        <if test="type != null">AND `type` = #{type}</if>
+        <if test="color != null and color != '' ">AND color = #{color}</if>
+    </sql>
+
+    <!--查询-->
+    <select id="selectByVo" parameterType="com.tianji.dam.domain.vo.TColorConfigVO" resultType="com.tianji.dam.domain.TColorConfig">
+        select
+        id as id,
+        `level` as level,
+        num as num,
+        `c` as c,
+        d as d,
+        `type` as type,
+        color as color,
+        plain  as plain
+        from t_color_config where 1=1
+        <if test="type != null">AND `type` = #{type}</if>
+        ORDER BY level ASC
+    </select>
+
+    <!--添加-->
+    <insert id="insert" parameterType="com.tianji.dam.domain.TColorConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into t_color_config (
+        <if test="level != null">`level`,</if>
+        <if test="num != null">num,</if>
+        <if test="c != null">`c`,</if>
+        <if test="d != null">d,</if>
+        <if test="type != null">`type`,</if>
+        <if test="color != null and color != '' ">color,</if>
+        <if test="plain != null and plain != '' ">plain</if>
+        )values(
+        <if test="level != null">#{level}, </if>
+        <if test="num != null">#{num},  </if>
+        <if test="c != null ">#{c},</if>
+        <if test="d != null">#{d},</if>
+        <if test="type != null">#{type},</if>
+        <if test="color != null and color != '' ">#{color},</if>
+        <if test="plain != null and plain != '' ">#{plain}</if>
+        )
+    </insert>
+    <!--修改-->
+    <update id="update" parameterType="com.tianji.dam.domain.TColorConfig">
+        update t_color_config
+        <set>
+            <if test="level != null"> `level` = #{level}, </if>
+            <if test="num != null"> num = #{num},  </if>
+            <if test="c != null"> `c` = #{c},</if>
+            <if test="d != null"> d = #{d},</if>
+            <if test="type != null"> `type` = #{type},</if>
+            <if test="color != null and color != '' "> color = #{color},</if>
+            <if test="plain != null and plain != '' "> plain = #{plain},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--删除-->
+    <delete id="delete" parameterType="Long">
+        delete from t_color_config where id = #{id}
+    </delete>
+    <!--批量删除-->
+    <delete id="deletes" parameterType="Long">
+        delete from t_color_config where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    
+       <select id="getById" parameterType="Long" resultType="com.tianji.dam.domain.TColorConfig">
+        select
+        id as id,
+        `level` as level,
+        num as num,
+        `c` as c,
+        d as d,
+        `type` as type,
+        color as color,
+        plain  as plain
+        from t_color_config where id = #{id}
+    </select>
+    
+
+</mapper>

@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.TDamsconstructionMapper">
+    <resultMap id="BaseResultMap" type="com.tianji.dam.domain.DamsConstruction">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="damsid" jdbcType="INTEGER" property="damsid"/>
+        <result column="pid" jdbcType="INTEGER" property="pid"/>
+        <result column="title" jdbcType="CHAR" property="title"/>
+        <result column="engcode" jdbcType="CHAR" property="engcode"/>
+        <result column="tablename" jdbcType="CHAR" property="tablename"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="gaocheng" jdbcType="DOUBLE" property="gaocheng"/>
+        <result column="gaochengact" jdbcType="DOUBLE" property="gaochengact"/>
+        <result column="cenggao" jdbcType="DOUBLE" property="cenggao"/>
+        <result column="planstarttime" jdbcType="VARCHAR" property="planstarttime"/>
+        <result column="planendtime" jdbcType="VARCHAR" property="planendtime"/>
+        <result column="actualstarttime" jdbcType="VARCHAR" property="actualstarttime"/>
+        <result column="actualendtime" jdbcType="VARCHAR" property="actualendtime"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="materialname" jdbcType="VARCHAR" property="materialname"/>
+        <result column="addtime" jdbcType="VARCHAR" property="addtime"/>
+        <result column="updatetime" jdbcType="VARCHAR" property="updatetime"/>
+        <result column="edge" jdbcType="VARCHAR" property="edge"/>
+        <result column="rect" jdbcType="VARCHAR" property="rect"/>
+        <result column="xbegin" jdbcType="DOUBLE" property="xbegin"/>
+        <result column="xend" jdbcType="DOUBLE" property="xend"/>
+        <result column="ybegin" jdbcType="DOUBLE" property="ybegin"/>
+        <result column="yend" jdbcType="DOUBLE" property="yend"/>
+        <result column="iscang" jdbcType="INTEGER" property="iscang"/>
+        <result column="hasdata" jdbcType="INTEGER" property="hasdata"/>
+        <result column="heightIndex" jdbcType="INTEGER" property="heightIndex"/>
+        <result column="ranges" jdbcType="VARCHAR" property="ranges"/>
+        <result column="speed" jdbcType="DOUBLE" property="speed"/>
+        <result column="frequency" jdbcType="INTEGER" property="frequency"/>
+        <result column="freedom1" jdbcType="VARCHAR" property="freedom1"/>
+        <result column="freedom2" jdbcType="VARCHAR" property="freedom2"/>
+        <result column="freedom3" jdbcType="VARCHAR" property="freedom3"/>
+        <result column="freedom4" jdbcType="VARCHAR" property="freedom4"/>
+        <result column="freedom5" jdbcType="VARCHAR" property="freedom5"/>
+        <result column="houdu" jdbcType="DOUBLE" property="houdu"/>
+        <result column="types" jdbcType="INTEGER" property="types"/>
+    </resultMap>
+    <resultMap id="BaseResultMap1" type="com.tianji.dam.domain.Dam">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="title" jdbcType="CHAR" property="title"/>
+    <result column="engcode" jdbcType="CHAR" property="engcode"/>
+    <result column="gaocheng" jdbcType="DOUBLE" property="gaocheng"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.tianji.dam.domain.Row">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="title" jdbcType="CHAR" property="title"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+        id, damsid, pid, title, engcode, tablename, status, gaocheng, gaochengact, cenggao, planstarttime, planendtime,
+        actualstarttime, actualendtime, remarks, materialname, addtime, updatetime, edge,
+        rect, xbegin, xend, ybegin, yend, iscang,
+        hasdata,heightIndex,ranges,speed,frequency,freedom1,freedom2,freedom3,freedom4,freedom5,houdu,types
+    </sql>
+
+
+    <select id="selectByid" resultType="integer" resultMap="BaseResultMap1">
+        select
+        id , title , engcode , gaocheng , cenggao
+        from t_damsconstruction
+        where pid = #{id}
+        order by id desc
+    </select>
+
+    <!--pid = #{pid,jdbcType=VARCHAR} and status != 8 修改为 right(tablename,1)=#{pid} and status = 8-->
+    <select id="getAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        <if test="s != 0 ">
+            where (substring_index(tablename,"_",-1)=#{s} or pid = #{s,jdbcType=VARCHAR}) and (status != 4 )
+            <!--where pid = #{s,jdbcType=VARCHAR} and (status = 8 or status = 88)-->
+        </if>
+        <if test="s == 0 ">
+            where pid = #{s,jdbcType=VARCHAR} and (status = 4 )
+        </if>
+    </select>
+
+    <select id="getAllVo" parameterType="com.tianji.dam.domain.vo.DamsConstructionVo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        <if test="id != 0 ">
+            where (substring_index(tablename,"_",-1)=#{id} or pid = #{id,jdbcType=VARCHAR})
+            <!--where pid = #{s,jdbcType=VARCHAR} and (status = 8 or status = 88)-->
+            <if test="planstarttime != null and planstarttime !=''  and planendtime != null and planendtime !='' ">
+                and DATE_FORMAT(planstarttime,'%Y-%m-%d')  <![CDATA[ >= ]]> #{planstarttime} and   DATE_FORMAT(planendtime,'%Y-%m-%d') <![CDATA[ <= ]]> #{planendtime}
+            </if>
+            <if test="actualstarttime != null and actualstarttime !=''  and actualendtime != null and actualendtime !='' ">
+                and DATE_FORMAT(actualstarttime,'%Y-%m-%d')   <![CDATA[ >= ]]> #{actualstarttime} and  DATE_FORMAT(actualendtime,'%Y-%m-%d')   <![CDATA[ <= ]]> #{actualendtime}
+            </if>
+
+            <if test="title != null and title !='' ">
+                and title like concat('%',#{title},'%')
+            </if>
+            <if test="status != null and status !='' ">
+                and status = #{status}
+            </if>
+        </if>
+        <if test="id == 0 ">
+            where pid = #{id,jdbcType=VARCHAR} and (status = 4 )
+        </if>
+    </select>
+
+    <select id="getAllByTod" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where status = 8
+    </select>
+
+    <!--pid = #{param1,jdbcType=VARCHAR} and status != 8 修改为 right(tablename,1)=#{param1} and status = 8-->
+    <!--and (status = 8 or status = 88)-->
+    <select id="getAllByPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        <if test="param1 != 0 ">
+            where (substring_index(tablename,"_",-1)=#{param1} or pid = #{param1,jdbcType=VARCHAR}) and (status != 4 )
+            <if test="param4 !=null"> and status =#{param4}</if>
+            order by engcode+0,addtime asc
+            limit #{param2,jdbcType=INTEGER},#{param3,jdbcType=INTEGER}
+            <!--where pid = #{param1,jdbcType=VARCHAR} and (status = 8 or status = 88) limit #{param2,jdbcType=INTEGER},#{param3,jdbcType=INTEGER}-->
+        </if>
+        <if test="param1 == 0 ">
+            where pid = #{param1,jdbcType=VARCHAR} and (status = 4 )
+            order by engcode+0,addtime asc
+            limit
+            #{param2,jdbcType=INTEGER},#{param3,jdbcType=INTEGER}
+        </if>
+
+    </select>
+    <select id="getAllByPageVo" parameterType="com.tianji.dam.domain.vo.DamsConstructionVo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        <if test="id != 0 and id !=-1 ">
+            where (substring_index(tablename,"_",-1)=#{id} or pid = #{id})
+            <if test="status != null and status !='' ">
+                and status = #{status}
+            </if>
+            <if test="planstarttime != null and planstarttime !=''  and planendtime != null and planendtime !='' ">
+                and DATE_FORMAT(planstarttime,'%Y-%m-%d')  <![CDATA[ >= ]]> #{planstarttime} and   DATE_FORMAT(planendtime,'%Y-%m-%d') <![CDATA[ <= ]]> #{planendtime}
+            </if>
+            <if test="actualstarttime != null and actualstarttime !=''  and actualendtime != null and actualendtime !='' ">
+                and DATE_FORMAT(actualstarttime,'%Y-%m-%d')   <![CDATA[ >= ]]> #{actualstarttime} and  DATE_FORMAT(actualendtime,'%Y-%m-%d')   <![CDATA[ <= ]]> #{actualendtime}
+            </if>
+
+            <if test="title != null and title !='' ">
+                and title like concat('%',#{title},'%')
+            </if>
+            order by engcode+0,addtime asc
+            limit #{begin,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+            <!--where pid = #{param1,jdbcType=VARCHAR} and (status = 8 or status = 88) limit #{param2,jdbcType=INTEGER},#{param3,jdbcType=INTEGER}-->
+        </if>
+        <if test="id == 0 ">
+            where pid = #{id,jdbcType=VARCHAR} and (status = 4 )
+            order by engcode+0,addtime asc
+            limit
+            #{begin,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+        </if>
+        <if test="id == -1 ">
+            where  status = 8
+            order by engcode+0,addtime asc
+            limit
+            #{begin,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="findAtreeMenuOpenedForAndriod" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where status = 1 and iscang=1
+    </select>
+
+
+    <select id="findMaterialByMaterialId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where status = 4 and materialname = #{materialname,jdbcType=INTEGER}
+    </select>
+
+    <select id="findByStatus" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where status = #{status,jdbcType=INTEGER} order by tablename
+    </select>
+
+    <select id="findRange" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where status = 5
+    </select>
+
+    <select id="getAllWorking" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where pid = #{pid,jdbcType=VARCHAR} and status = 1
+    </select>
+
+    <select id="getAllClosed" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where pid = #{pid,jdbcType=VARCHAR} and status =2
+    </select>
+
+    <select id="getAllClosedByMaterial" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where materialname = #{materialname,jdbcType=VARCHAR} and status =2 and iscang = 1 order by gaocheng DESC
+    </select>
+
+    <select id="getAllOpenedByMaterial" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where materialname = #{materialname,jdbcType=VARCHAR} and status =88 and iscang = 1
+    </select>
+
+    <select id="getAllByMaterial" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where materialname = #{materialname,jdbcType=VARCHAR} and iscang = 1 and status != 8
+    </select>
+
+
+    <select id="selectByPid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where Pid = #{pid,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByTablename" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where tablename = #{tablename,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="getAllHasData" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where hasdata = 1 order by heightIndex DESC,tablename ,pid
+    </select>
+
+    <select id="getAllHasDataByMaterialname" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where hasdata = 1 and materialname=#{materialname,jdbcType=VARCHAR} order by heightIndex DESC,tablename ,pid
+    </select>
+
+    <select id="findAtreeMenuThirdHasDataByMaterialnameAndHeightIndex" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where hasdata = 1 and materialname=#{materialname,jdbcType=VARCHAR} and heightIndex =
+        #{heightIndex,jdbcType=INTEGER } order by tablename ,pid
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where iscang = 1
+    </select>
+    <select id="findAllWorking" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where iscang = 1 and status = 1 and hasdata = 1
+    </select>
+
+    <select id="findAllWorkingPlane" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where status = 5
+    </select>
+
+    <select id="findAllRange" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where status = 7
+    </select>
+
+    <select id="findByTablename" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where tablename= #{tablename,jdbcType=CHAR} limit 0,1
+    </select>
+
+
+    <select id="getAtreeMenu" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from t_damsconstruction
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.tianji.dam.domain.DamsConstruction" useGeneratedKeys="true" keyProperty="id">
+        insert into t_damsconstruction (damsid, pid,
+        title, engcode, tablename, status,
+        gaocheng,gaochengact, cenggao, planstarttime,
+        planendtime, actualstarttime, actualendtime,
+        remarks, materialname, addtime,
+        updatetime, edge, rect, xbegin, xend, ybegin, yend,
+        iscang,hasdata,heightIndex,ranges,speed,frequency,freedom1,freedom2,freedom3,freedom4,freedom5,houdu,types
+        )
+        values (#{damsid,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER},
+        #{title,jdbcType=CHAR}, #{engcode,jdbcType=CHAR}, #{tablename,jdbcType=CHAR},#{status,jdbcType=INTEGER},
+        #{gaocheng,jdbcType=DOUBLE},#{gaochengact,jdbcType=DOUBLE}, #{cenggao,jdbcType=DOUBLE}, #{planstarttime,jdbcType=VARCHAR},
+        #{planendtime,jdbcType=VARCHAR}, #{actualstarttime,jdbcType=VARCHAR}, #{actualendtime,jdbcType=VARCHAR},
+        #{remarks,jdbcType=VARCHAR}, #{materialname,jdbcType=VARCHAR}, #{addtime,jdbcType=VARCHAR},
+        #{updatetime,jdbcType=VARCHAR}, #{edge,jdbcType=VARCHAR}, #{rect,jdbcType=VARCHAR}, #{xbegin,jdbcType=DOUBLE},
+        #{xend,jdbcType=DOUBLE}, #{ybegin,jdbcType=DOUBLE}, #{yend,jdbcType=DOUBLE}, #{iscang,jdbcType=INTEGER},
+        #{hasdata,jdbcType=INTEGER},#{heightIndex,jdbcType=INTEGER},
+        #{ranges,jdbcType=VARCHAR},#{speed,jdbcType=DOUBLE},
+        #{frequency,jdbcType=INTEGER},#{freedom1},#{freedom2},#{freedom3},#{freedom4},#{freedom5},#{houdu},#{types}
+        )
+    </insert>
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" keyColumn="id"
+            parameterType="com.tianji.dam.domain.DamsConstruction">
+        insert into t_damsconstruction
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="damsid != null">
+                damsid,
+            </if>
+            <if test="pid != null">
+                pid,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="engcode != null">
+                engcode,
+            </if>
+            <if test="tablename != null">
+                tablename,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="gaocheng != null">
+                gaocheng,
+            </if>
+            <if test="gaochengact != null">
+                gaochengact,
+            </if>
+            <if test="cenggao != null">
+                cenggao,
+            </if>
+            <if test="planstarttime != null">
+                planstarttime,
+            </if>
+            <if test="planendtime != null">
+                planendtime,
+            </if>
+            <if test="actualstarttime != null">
+                actualstarttime,
+            </if>
+            <if test="actualendtime != null">
+                actualendtime,
+            </if>
+            <if test="remarks != null">
+                remarks,
+            </if>
+            <if test="materialname != null">
+                materialname,
+            </if>
+            <if test="addtime != null">
+                addtime,
+            </if>
+            <if test="updatetime != null">
+                updatetime,
+            </if>
+            <if test="edge != null">
+                edge,
+            </if>
+            <if test="rect != null">
+                rect,
+            </if>
+            <if test="xbegin != null">
+                xbegin,
+            </if>
+            <if test="xend != null">
+                xend,
+            </if>
+            <if test="ybegin != null">
+                ybegin,
+            </if>
+            <if test="yend != null">
+                yend,
+            </if>
+            <if test="iscang != null">
+                iscang,
+            </if>
+            <if test="hasdata != null">
+                hasdata,
+            </if>
+            <if test="hasdata != null">
+                heightIndex,
+            </if>
+            <if test="speed != null">
+                speed,
+            </if>
+            <if test="frequency != null">
+                frequency,
+            </if>
+            <if test="freedom1 != null">
+                freedom1,
+            </if>
+            <if test="freedom2 != null">
+                freedom2,
+            </if>
+            <if test="freedom3 != null">
+                freedom3,
+            </if>
+            <if test="freedom4 != null">
+                freedom4,
+            </if>
+            <if test="freedom5 != null">
+                freedom5,
+            </if>
+            <if test="houdu != null">
+                houdu,
+            </if>
+            <if test="types != null">
+                types,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="damsid != null">
+                #{damsid,jdbcType=INTEGER},
+            </if>
+            <if test="pid != null">
+                #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=CHAR},
+            </if>
+            <if test="engcode != null">
+                #{engcode,jdbcType=CHAR},
+            </if>
+            <if test="tablename != null">
+                #{tablename,jdbcType=CHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="gaocheng != null">
+                #{gaocheng,jdbcType=DOUBLE},
+            </if>
+            <if test="gaochengact != null">
+                #{gaochengact,jdbcType=DOUBLE},
+            </if>
+            <if test="cenggao != null">
+                #{cenggao,jdbcType=DOUBLE},
+            </if>
+            <if test="planstarttime != null">
+                #{planstarttime,jdbcType=VARCHAR},
+            </if>
+            <if test="planendtime != null">
+                #{planendtime,jdbcType=VARCHAR},
+            </if>
+            <if test="actualstarttime != null">
+                #{actualstarttime,jdbcType=VARCHAR},
+            </if>
+            <if test="actualendtime != null">
+                #{actualendtime,jdbcType=VARCHAR},
+            </if>
+            <if test="remarks != null">
+                #{remarks,jdbcType=VARCHAR},
+            </if>
+            <if test="materialname != null">
+                #{materialname,jdbcType=VARCHAR},
+            </if>
+            <if test="addtime != null">
+                #{addtime,jdbcType=VARCHAR},
+            </if>
+            <if test="updatetime != null">
+                #{updatetime,jdbcType=VARCHAR},
+            </if>
+            <if test="edge != null">
+                #{edge,jdbcType=VARCHAR},
+            </if>
+            <if test="rect != null">
+                #{rect,jdbcType=VARCHAR},
+            </if>
+            <if test="xbegin != null">
+                #{xbegin,jdbcType=DOUBLE},
+            </if>
+            <if test="xend != null">
+                #{xend,jdbcType=DOUBLE},
+            </if>
+            <if test="ybegin != null">
+                #{ybegin,jdbcType=DOUBLE},
+            </if>
+            <if test="yend != null">
+                #{yend,jdbcType=DOUBLE},
+            </if>
+            <if test="iscang != null">
+                #{iscang,jdbcType=INTEGER},
+            </if>
+            <if test="hasdata != null">
+                #{hasdata,jdbcType=INTEGER},
+            </if>
+            <if test="heightIndex != null">
+                #{heightIndex,jdbcType=INTEGER},
+            </if>
+            <if test="speed != null">
+                #{speed,jdbcType=DOUBLE},
+            </if>
+            <if test="frequency != null">
+                #{frequency,jdbcType=INTEGER},
+            </if>
+            <if test="freedom1 != null">
+                #{freedom1},
+            </if>
+            <if test="freedom2 != null">
+                #{freedom2},
+            </if>
+            <if test="freedom3 != null">
+                #{freedom3},
+            </if>
+            <if test="freedom4 != null">
+                #{freedom4},
+            </if>
+            <if test="freedom5 != null">
+                #{freedom5},
+            </if>
+            <if test="houdu != null">
+                #{houdu},
+            </if>
+            <if test="types != null">
+                #{ types},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.tianji.dam.domain.DamsConstruction">
+        update t_damsconstruction
+        <set>
+            <if test="damsid != null">
+                damsid = #{damsid,jdbcType=INTEGER},
+            </if>
+            <if test="pid != null">
+                pid = #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=CHAR},
+            </if>
+            <if test="engcode != null">
+                engcode = #{engcode,jdbcType=CHAR},
+            </if>
+            <if test="tablename != null">
+                tablename = #{tablename,jdbcType=CHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="gaocheng != null">
+                gaocheng = #{gaocheng,jdbcType=DOUBLE},
+            </if>
+            <if test="gaochengact != null">
+                gaochengact = #{gaochengact,jdbcType=DOUBLE},
+            </if>
+            <if test="cenggao != null">
+                cenggao = #{cenggao,jdbcType=DOUBLE},
+            </if>
+            <if test="planstarttime != null">
+                planstarttime = #{planstarttime,jdbcType=VARCHAR},
+            </if>
+            <if test="planendtime != null">
+                planendtime = #{planendtime,jdbcType=VARCHAR},
+            </if>
+            <if test="actualstarttime != null">
+                actualstarttime = #{actualstarttime,jdbcType=VARCHAR},
+            </if>
+            <if test="actualendtime != null">
+                actualendtime = #{actualendtime,jdbcType=VARCHAR},
+            </if>
+            <if test="remarks != null">
+                remarks = #{remarks,jdbcType=VARCHAR},
+            </if>
+            <if test="materialname != null">
+                materialname = #{materialname,jdbcType=VARCHAR},
+            </if>
+            <if test="addtime != null">
+                addtime = #{addtime,jdbcType=VARCHAR},
+            </if>
+            <if test="updatetime != null">
+                updatetime = #{updatetime,jdbcType=VARCHAR},
+            </if>
+            <if test="edge != null">
+                edge = #{edge,jdbcType=VARCHAR},
+            </if>
+            <if test="rect != null">
+                rect = #{rect,jdbcType=VARCHAR},
+            </if>
+            <if test="speed != null">
+                speed = #{speed,jdbcType=DOUBLE},
+            </if>
+            <if test="frequency != null">
+                frequency = #{frequency,jdbcType=INTEGER},
+            </if>
+            <if test="xbegin != null">
+                xbegin = #{xbegin,jdbcType=DOUBLE},
+            </if>
+            <if test="xend != null">
+                xend= #{xend,jdbcType=DOUBLE},
+            </if>
+            <if test="ybegin != null">
+                ybegin= #{ybegin,jdbcType=DOUBLE},
+            </if>
+            <if test="yend != null">
+                yend= #{yend,jdbcType=DOUBLE},
+            </if>
+            <if test="iscang != null">
+                iscang= #{iscang,jdbcType=INTEGER},
+            </if>
+            <if test="hasdata != null">
+                hasdata= #{hasdata,jdbcType=INTEGER},
+            </if>
+            <if test="heightIndex != null">
+                heightIndex= #{heightIndex,jdbcType=INTEGER}
+            </if>
+            <if test="freedom1 != null">
+                freedom1= #{freedom1},
+            </if>
+            <if test="freedom2 != null">
+                freedom2=#{freedom2},
+            </if>
+            <if test="freedom3 != null">
+                freedom3=#{freedom3},
+            </if>
+            <if test="freedom4 != null">
+                freedom4=#{freedom4},
+            </if>
+            <if test="freedom5 != null">
+                freedom5= #{freedom5},
+            </if>
+            <if test="houdu != null">
+                houdu= #{houdu},
+            </if>
+            <if test="types != null">
+                types= #{ types}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.tianji.dam.domain.DamsConstruction">
+        update t_damsconstruction
+        set damsid = #{damsid,jdbcType=INTEGER},
+        pid = #{pid,jdbcType=INTEGER},
+        title = #{title,jdbcType=CHAR},
+        engcode = #{engcode,jdbcType=CHAR},
+        tablename = #{tablename,jdbcType=CHAR},
+        status = #{status,jdbcType=INTEGER},
+        gaocheng = #{gaocheng,jdbcType=DOUBLE},
+        gaochengact = #{gaochengact,jdbcType=DOUBLE},
+        cenggao = #{cenggao,jdbcType=DOUBLE},
+        planstarttime = #{planstarttime,jdbcType=VARCHAR},
+        planendtime = #{planendtime,jdbcType=VARCHAR},
+        actualstarttime = #{actualstarttime,jdbcType=VARCHAR},
+        actualendtime = #{actualendtime,jdbcType=VARCHAR},
+        remarks = #{remarks,jdbcType=VARCHAR},
+        materialname = #{materialname,jdbcType=VARCHAR},
+        addtime = #{addtime,jdbcType=VARCHAR},
+        updatetime = #{updatetime,jdbcType=VARCHAR},
+        edge = #{edge,jdbcType=VARCHAR},
+        rect = #{rect,jdbcType=VARCHAR},
+        xbegin = #{xbegin,jdbcType=DOUBLE},
+        xend = #{xend,jdbcType=DOUBLE},
+        ybegin = #{ybegin,jdbcType=DOUBLE},
+        yend = #{yend,jdbcType=DOUBLE},
+        iscang = #{iscang,jdbcType=INTEGER},
+        hasdata = #{hasdata,jdbcType=INTEGER},
+        heightIndex = #{heightIndex,jdbcType=INTEGER},
+        ranges = #{ranges,jdbcType=VARCHAR},
+        speed = #{speed,jdbcType=DOUBLE},
+        frequency = #{frequency,jdbcType=INTEGER},
+        freedom1 =#{freedom1},
+        freedom2 =#{freedom2},
+        freedom3=#{freedom3},
+        freedom4=#{freedom4},
+        freedom5= #{freedom5},
+        houdu= #{houdu},
+        types= #{ types}
+
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!--select
+        <include refid="Base_Column_List" />
+        from t_damsconstruction
+        where tablename LIKE  concat('%',#{tablename}) AND iscang = 1-->
+    <select id="getDamsByTableName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where substring_index(tablename,"_",-1)=#{tablename} AND `status`=8 AND iscang = 1
+    </select>
+
+    <select id="getDamsMax" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_damsconstruction
+        where `status`=7 ORDER BY tablename DESC LIMIT 1
+    </select>
+
+    <!--修改边界-->
+    <update id="updateRanges" parameterType="java.util.Map">
+        update t_damsconstruction
+        set ranges = #{ranges}
+        where id = #{id}
+    </update>
+
+    <select id="selectDams" resultType="com.tianji.dam.domain.vo.DamsJtsTreeVo">
+        select
+        id as id,
+        title as name,
+        tablename as tablename,
+        gaocheng as gaocheng,
+        cenggao as cenggao,
+        ranges as ranges
+        from t_damsconstruction
+        where (status = 8 or status = 88)
+    </select>
+
+    <select id="selectTDamsconstructionByStatus4" resultMap="BaseResultMap2">
+        select
+        id as id,
+        title as title
+        from t_damsconstruction
+        where status = 4
+    </select>
+
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.TRealProcessPicMapper">
+    
+    <resultMap type="com.tianji.dam.domain.TRealProcessPic" id="TRealProcessPicResult">
+        <result property="id"    column="id"    />
+        <result property="times"    column="times"    />
+        <result property="srcs"    column="srcs"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="freedom1"    column="freedom1"    />
+        <result property="freedom2"    column="freedom2"    />
+    </resultMap>
+
+    <sql id="selectTRealProcessPicVo">
+        select id, times, srcs, create_time, freedom1, freedom2 from t_real_process_pic
+    </sql>
+
+    <select id="selectlast"  resultMap="TRealProcessPicResult">
+        <include refid="selectTRealProcessPicVo"/>
+        order by create_time desc limit 1
+    </select>
+    <select id="selectTRealProcessPicList" parameterType="com.tianji.dam.domain.TRealProcessPic" resultMap="TRealProcessPicResult">
+        <include refid="selectTRealProcessPicVo"/>
+        <where>  
+            <if test="times != null  and times != ''"> and times = #{times}</if>
+            <if test="srcs != null  and srcs != ''"> and srcs = #{srcs}</if>
+            <if test="freedom1 != null  and freedom1 != ''"> and freedom1 = #{freedom1}</if>
+            <if test="freedom2 != null  and freedom2 != ''"> and freedom2 = #{freedom2}</if>
+        </where>
+    </select>
+    
+    <select id="selectTRealProcessPicById" parameterType="Long" resultMap="TRealProcessPicResult">
+        <include refid="selectTRealProcessPicVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTRealProcessPic" parameterType="com.tianji.dam.domain.TRealProcessPic">
+        insert into t_real_process_pic
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="times != null">times,</if>
+            <if test="srcs != null">srcs,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="freedom1 != null">freedom1,</if>
+            <if test="freedom2 != null">freedom2,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="times != null">#{times},</if>
+            <if test="srcs != null">#{srcs},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="freedom1 != null">#{freedom1},</if>
+            <if test="freedom2 != null">#{freedom2},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTRealProcessPic" parameterType="com.tianji.dam.domain.TRealProcessPic">
+        update t_real_process_pic
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="times != null">times = #{times},</if>
+            <if test="srcs != null">srcs = #{srcs},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="freedom1 != null">freedom1 = #{freedom1},</if>
+            <if test="freedom2 != null">freedom2 = #{freedom2},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTRealProcessPicById" parameterType="Long">
+        delete from t_real_process_pic where id = #{id}
+    </delete>
+
+    <delete id="deleteTRealProcessPicByIds" parameterType="String">
+        delete from t_real_process_pic where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

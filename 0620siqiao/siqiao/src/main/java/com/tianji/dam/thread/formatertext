@@ -1,0 +1,30 @@
+{
+    "total": 941,
+    "rows": [
+        {
+            "searchValue": null,
+            "createBy": null,
+            "createTime": null,
+            "updateBy": null,
+            "updateTime": null,
+            "remark": null,
+            "params": {},
+            "gid": "018f8b9855f141eea5c3e8b1c54ce932",
+            "damgid": 17,
+            "carid": 1,
+            "damtitle": "测试",
+            "carname": "1号碾压机",
+            "normalvalue": 3.0,
+            "currentvalue": 3.31,
+            "creattime": "2023-01-11 17:17:34",
+            "datatime": "2023-01-11 17:17:33",
+            "freedom1": "1",
+            "freedom2": null,
+            "freedom3": null,
+            "freedom4": null,
+            "freedom5": null
+        }
+    ],
+    "code": 200,
+    "msg": "查询成功"
+}
