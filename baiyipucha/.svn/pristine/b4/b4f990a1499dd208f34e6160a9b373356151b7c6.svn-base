@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BPatrolFileMapper">
+    
+    <resultMap type="BPatrolFile" id="BPatrolFileResult">
+        <result property="id"    column="id"    />
+        <result property="patorlId"    column="patorl_id"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="freedom1"    column="freedom1"    />
+        <result property="freedom2"    column="freedom2"    />
+        <result property="freedom3"    column="freedom3"    />
+        <result property="freedom4"    column="freedom4"    />
+        <result property="freedom5"    column="freedom5"    />
+    </resultMap>
+
+    <sql id="selectBPatrolFileVo">
+        select id, patorl_id, file_path, del_flag, create_time, freedom1, freedom2, freedom3, freedom4, freedom5 from b_patrol_file
+    </sql>
+
+    <select id="selectBPatrolFileList" parameterType="BPatrolFile" resultMap="BPatrolFileResult">
+        <include refid="selectBPatrolFileVo"/>
+        <where>  
+            <if test="patorlId != null "> and patorl_id = #{patorlId}</if>
+            <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
+            <if test="freedom1 != null  and freedom1 != ''"> and freedom1 = #{freedom1}</if>
+            <if test="freedom2 != null  and freedom2 != ''"> and freedom2 = #{freedom2}</if>
+            <if test="freedom3 != null  and freedom3 != ''"> and freedom3 = #{freedom3}</if>
+            <if test="freedom4 != null  and freedom4 != ''"> and freedom4 = #{freedom4}</if>
+            <if test="freedom5 != null  and freedom5 != ''"> and freedom5 = #{freedom5}</if>
+        </where>
+    </select>
+    
+    <select id="selectBPatrolFileById" parameterType="Long" resultMap="BPatrolFileResult">
+        <include refid="selectBPatrolFileVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBPatrolFile" parameterType="BPatrolFile" useGeneratedKeys="true" keyProperty="id">
+        insert into b_patrol_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="patorlId != null">patorl_id,</if>
+            <if test="filePath != null">file_path,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="freedom1 != null">freedom1,</if>
+            <if test="freedom2 != null">freedom2,</if>
+            <if test="freedom3 != null">freedom3,</if>
+            <if test="freedom4 != null">freedom4,</if>
+            <if test="freedom5 != null">freedom5,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="patorlId != null">#{patorlId},</if>
+            <if test="filePath != null">#{filePath},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="freedom1 != null">#{freedom1},</if>
+            <if test="freedom2 != null">#{freedom2},</if>
+            <if test="freedom3 != null">#{freedom3},</if>
+            <if test="freedom4 != null">#{freedom4},</if>
+            <if test="freedom5 != null">#{freedom5},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBPatrolFile" parameterType="BPatrolFile">
+        update b_patrol_file
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="patorlId != null">patorl_id = #{patorlId},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="freedom1 != null">freedom1 = #{freedom1},</if>
+            <if test="freedom2 != null">freedom2 = #{freedom2},</if>
+            <if test="freedom3 != null">freedom3 = #{freedom3},</if>
+            <if test="freedom4 != null">freedom4 = #{freedom4},</if>
+            <if test="freedom5 != null">freedom5 = #{freedom5},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBPatrolFileById" parameterType="Long">
+        delete from b_patrol_file where id = #{id}
+    </delete>
+
+    <delete id="deleteBPatrolFileByIds" parameterType="String">
+        delete from b_patrol_file where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

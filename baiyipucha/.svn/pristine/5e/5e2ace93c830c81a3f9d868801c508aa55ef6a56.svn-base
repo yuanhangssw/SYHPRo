@@ -1,0 +1,99 @@
+package com.ruoyi.system.mapper;
+
+import com.ruoyi.system.domain.BProject;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
+import java.util.Map;
+
+public interface CommonMapper {
+
+    @Select("SELECT" +
+            " DISTINCT t2.id,t2.project_name projectName" +
+            " FROM" +
+            " `b_inspector_unit`  t1" +
+            " LEFT JOIN  b_project  t2  on t1.project_id= t2.id" +
+            " WHERE" +
+            " inspector =#{userid}")
+     List<BProject> getprojectlistbyuserid(@Param("userid") long userid);
+
+    @Select("SELECT " +
+            " COUNT( a.id ) total  " +
+            " FROM " +
+            " `b_patrol` a " +
+            " LEFT JOIN b_patrol_unit b ON a.patrol_unit = b.id  " +
+            " WHERE " +
+            " b.project_id = #{projectid}  " +
+            " AND inspector_id = #{userid}  " +
+            " and  patrol_type =#{type}")
+    int   gettotalbytype(@Param("userid") long userid,@Param("type") int type,@Param("projectid") long project);
+
+    @Select("SELECT\n" +
+            "\tcount( patrol_unit_id ) \n" +
+            "FROM\n" +
+            "\t`b_inspector_unit` \n" +
+            "WHERE\n" +
+            "\tproject_id = #{projectid}\n" +
+            "\tAND inspector=#{userid} "
+            )
+    int  gettotalunit(@Param("userid") long userid,@Param("projectid") long project);
+    @Select("SELECT " +
+            " COUNT(a.id) total  " +
+            " FROM " +
+            " `b_patrol` a " +
+            " LEFT JOIN b_patrol_unit b ON a.patrol_unit = b.id  " +
+            " WHERE " +
+            " b.project_id = #{projectid}  " +
+            " AND inspector_id = #{userid}  ")
+    int getdatatotal (@Param("userid") long userid,@Param("projectid") long project);
+    @Select("SELECT " +
+            " COUNT(a.id) total  " +
+            " FROM " +
+            " `b_patrol` a " +
+            " LEFT JOIN b_patrol_unit b ON a.patrol_unit = b.id  " +
+            " WHERE " +
+            " b.project_id = #{projectid}  " +
+            " AND inspector_id = #{userid}  " +
+            "  and audit_status =#{status}")
+    int getdatatotalbystatus (@Param("userid") long userid,@Param("status") String status,@Param("projectid") long project);
+
+    @Select("SELECT\n" +
+            "    a.patrol_unit,\n" +
+            "    b.unit_name unitname,\n" +
+            "    SUM( CASE WHEN a.patrol_type = '1' THEN 1 ELSE 0 END ) AS type1total,\n" +
+            "    SUM( CASE WHEN a.patrol_type = '2' THEN 1 ELSE 0 END ) AS type2total\n" +
+            "   FROM\n" +
+            "    `b_patrol` a\n" +
+            "    LEFT JOIN b_patrol_unit b ON a.patrol_unit = b.id \n" +
+            "   WHERE   \n" +
+            "    b.project_id = #{projectid}\n" +
+            "    AND inspector_id = #{userid}\n" +
+            "   GROUP BY\n" +
+            "    b.unit_name ")
+    List<Map<String,Object>> getprojecttotallist(@Param("projectid")Long projectid, @Param("userid") Long userid);
+
+    @Select("SELECT\n" +
+            " COUNT(a.id) total,\n" +
+            " sum( CASE WHEN a.audit_status = '3' THEN 1 ELSE 0 END )  AS passtotal ,\n" +
+            " sum( CASE WHEN a.audit_status = '4' THEN 1 ELSE 0 END )  AS backtotal\n" +
+            "FROM\n" +
+            "\t`b_patrol` a" +
+            " LEFT JOIN b_patrol_unit b ON a.patrol_unit = b.id \n" +
+            " WHERE   \n" +
+            " b.project_id = #{projectid}\n" +
+            " AND a.inspector_id = #{userid}\n"
+            )
+      Map<String,Integer> getdatatotalbystatus2(@Param("projectid")Long projectid, @Param("userid") Long userid);
+
+    @Select("SELECT\n" +
+            "\tDISTINCT t2.id,\n" +
+            "\tt2.unit_name unit_name \n" +
+            "FROM\n" +
+            "\t`b_inspector_unit` t1\n" +
+            "\tLEFT JOIN b_patrol_unit t2 ON t1.patrol_unit_id = t2.id \n" +
+            "WHERE\n" +
+            "\tt1.inspector =#{userid}\n" +
+            "\tand t1.project_id=#{projectid}")
+    List<Map<String, Object>> getprojectunitllist(@Param("projectid")Long projectid, @Param("userid") Long userid);
+}

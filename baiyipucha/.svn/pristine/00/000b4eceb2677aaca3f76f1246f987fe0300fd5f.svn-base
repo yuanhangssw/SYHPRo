@@ -1,0 +1,108 @@
+package com.ruoyi.system.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import com.ruoyi.common.utils.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.ruoyi.system.mapper.BProjectMapper;
+import com.ruoyi.system.domain.BProject;
+import com.ruoyi.system.service.IBProjectService;
+
+/**
+ * 项目信息Service业务层处理
+ * 
+ * @author ruoyi
+ * @date 2024-03-05
+ */
+@Service
+public class BProjectServiceImpl implements IBProjectService 
+{
+    @Autowired
+    private BProjectMapper bProjectMapper;
+
+    /**
+     * 查询项目信息
+     * 
+     * @param id 项目信息主键
+     * @return 项目信息
+     */
+    @Override
+    public BProject selectBProjectById(Long id)
+    {
+        return bProjectMapper.selectBProjectById(id);
+    }
+
+    /**
+     * 查询项目信息列表
+     * 
+     * @param bProject 项目信息
+     * @return 项目信息
+     */
+    @Override
+    public List<BProject> selectBProjectList(BProject bProject)
+    {
+        return bProjectMapper.selectBProjectList(bProject);
+    }
+
+    /**
+     * 新增项目信息
+     * 
+     * @param bProject 项目信息
+     * @return 结果
+     */
+    @Override
+    public int insertBProject(BProject bProject)
+    {
+        bProject.setCreateTime(DateUtils.getNowDate());
+        return bProjectMapper.insertBProject(bProject);
+    }
+
+    /**
+     * 修改项目信息
+     * 
+     * @param bProject 项目信息
+     * @return 结果
+     */
+    @Override
+    public int updateBProject(BProject bProject)
+    {
+        bProject.setUpdateTime(DateUtils.getNowDate());
+        return bProjectMapper.updateBProject(bProject);
+    }
+
+    /**
+     * 批量删除项目信息
+     * 
+     * @param ids 需要删除的项目信息主键
+     * @return 结果
+     */
+    @Override
+    public int deleteBProjectByIds(Long[] ids)
+    {
+        return bProjectMapper.deleteBProjectByIds(ids);
+    }
+
+    /**
+     * 删除项目信息信息
+     * 
+     * @param id 项目信息主键
+     * @return 结果
+     */
+    @Override
+    public int deleteBProjectById(Long id)
+    {
+        return bProjectMapper.deleteBProjectById(id);
+    }
+
+    @Override
+    public List<BProject> getBProjectByDept(List<Long> deptId) {
+        return bProjectMapper.getBProjectByDept(deptId);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectBProjectListJoinPrevent(Long id) {
+        return  bProjectMapper.selectBProjectListJoinPrevent(id);
+    }
+}

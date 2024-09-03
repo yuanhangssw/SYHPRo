@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BReservoirPreventionMapper">
+    <resultMap type="BReservoirPrevention" id="BReservoirPreventionResult">
+        <result property="id" column="id" />
+        <result property="detrimentType" column="detriment_type" />
+        <result property="projectId" column="project_id" />
+        <result property="unitId" column="unit_id" />
+        <result property="detrimentLevel" column="detriment_level" />
+        <result property="leaksNumber" column="leaks_number" />
+        <result property="throughNumber" column="through_number" />
+        <result property="dropSocketNumber" column="drop_socket_number" />
+        <result property="nestDigging" column="nest_digging" />
+        <result property="chargeArea" column="charge_area" />
+        <result property="groutingQuantity" column="grouting_quantity" />
+        <result property="investCapital" column="invest_capital" />
+        <result property="zoonType" column="zoon_type" />
+        <result property="zoonGovernNumber" column="zoon_govern_number" />
+        <result property="zoonGovernType" column="zoon_govern_type" />
+        <result property="createTime" column="create_time" />
+        <result property="projectType" column="project_type" />
+        <result property="oneDetrimentLength" column="one_detriment_length" />
+        <result property="twoDetrimentLength" column="two_detriment_length" />
+        <result property="threeDetrimentLength" column="three_detriment_length" />
+    </resultMap>
+
+    <sql id="selectBReservoirPreventionVo">
+        select id, detriment_type, project_id, unit_id, detriment_level, leaks_number, through_number, drop_socket_number, nest_digging, charge_area, grouting_quantity, invest_capital, zoon_type, zoon_govern_number, zoon_govern_type, create_time, one_detriment_length, two_detriment_length, three_detriment_length from b_reservoir_prevention
+    </sql>
+
+    <select id="selectBReservoirPreventionList" parameterType="BReservoirPrevention" resultMap="BReservoirPreventionResult">
+        <include refid="selectBReservoirPreventionVo"/>
+        <where>
+            <if test="detrimentType != null and detrimentType != ''"> and detriment_type = #{detrimentType}</if>
+            <if test="projectId != null"> and project_id = #{projectId}</if>
+            <if test="detrimentLevel != null"> and detriment_level = #{detrimentLevel}</if>
+            <if test="leaksNumber != null"> and leaks_number = #{leaksNumber}</if>
+            <if test="throughNumber != null"> and through_number = #{throughNumber}</if>
+            <if test="dropSocketNumber != null"> and drop_socket_number = #{dropSocketNumber}</if>
+            <if test="nestDigging != null"> and nest_digging = #{nestDigging}</if>
+            <if test="chargeArea != null"> and charge_area = #{chargeArea}</if>
+            <if test="groutingQuantity != null"> and grouting_quantity = #{groutingQuantity}</if>
+            <if test="investCapital != null"> and invest_capital = #{investCapital}</if>
+            <if test="zoonType != null and zoonType != ''"> and zoon_type = #{zoonType}</if>
+            <if test="zoonGovernNumber != null"> and zoon_govern_number = #{zoonGovernNumber}</if>
+            <if test="zoonGovernType != null and zoonGovernType != ''"> and zoon_govern_type = #{zoonGovernType}</if>
+            <if test="unitId != null and unitId != ''"> and unit_id = #{unitId}</if>
+        </where>
+    </select>
+
+    <select id="selectBReservoirPreventionById" parameterType="Long" resultMap="BReservoirPreventionResult">
+        <include refid="selectBReservoirPreventionVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBReservoirPrevention" parameterType="BReservoirPrevention" useGeneratedKeys="true" keyProperty="id">
+        insert into b_reservoir_prevention
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="detrimentType != null">detriment_type,</if>
+            <if test="projectId != null">project_id,</if>
+            <if test="unitId != null">unit_id,</if>
+            <if test="detrimentLevel != null">detriment_level,</if>
+            <if test="leaksNumber != null">leaks_number,</if>
+            <if test="throughNumber != null">through_number,</if>
+            <if test="dropSocketNumber != null">drop_socket_number,</if>
+            <if test="nestDigging != null">nest_digging,</if>
+            <if test="chargeArea != null">charge_area,</if>
+            <if test="groutingQuantity != null">grouting_quantity,</if>
+            <if test="investCapital != null">invest_capital,</if>
+            <if test="zoonType != null">zoon_type,</if>
+            <if test="zoonGovernNumber != null">zoon_govern_number,</if>
+            <if test="zoonGovernType != null">zoon_govern_type,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="oneDetrimentLength != null">one_detriment_length,</if>
+            <if test="twoDetrimentLength != null">two_detriment_length,</if>
+            <if test="threeDetrimentLength != null">three_detriment_length,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="detrimentType != null">#{detrimentType},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="unitId != null">#{unitId},</if>
+            <if test="detrimentLevel != null">#{detrimentLevel},</if>
+            <if test="leaksNumber != null">#{leaksNumber},</if>
+            <if test="throughNumber != null">#{throughNumber},</if>
+            <if test="dropSocketNumber != null">#{dropSocketNumber},</if>
+            <if test="nestDigging != null">#{nestDigging},</if>
+            <if test="chargeArea != null">#{chargeArea},</if>
+            <if test="groutingQuantity != null">#{groutingQuantity},</if>
+            <if test="investCapital != null">#{investCapital},</if>
+            <if test="zoonType != null">#{zoonType},</if>
+            <if test="zoonGovernNumber != null">#{zoonGovernNumber},</if>
+            <if test="zoonGovernType != null">#{zoonGovernType},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="oneDetrimentLength != null">#{oneDetrimentLength},</if>
+            <if test="twoDetrimentLength != null">#{twoDetrimentLength},</if>
+            <if test="threeDetrimentLength != null">#{threeDetrimentLength},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBReservoirPrevention" parameterType="BReservoirPrevention">
+        update b_reservoir_prevention
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="detrimentType != null">detriment_type = #{detrimentType},</if>
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="unitId != null">unit_id = #{unitId},</if>
+            <if test="detrimentLevel != null">detriment_level = #{detrimentLevel},</if>
+            <if test="leaksNumber != null">leaks_number = #{leaksNumber},</if>
+            <if test="throughNumber != null">through_number = #{throughNumber},</if>
+            <if test="dropSocketNumber != null">drop_socket_number = #{dropSocketNumber},</if>
+            <if test="nestDigging != null">nest_digging = #{nestDigging},</if>
+            <if test="chargeArea != null">charge_area = #{chargeArea},</if>
+            <if test="groutingQuantity != null">grouting_quantity = #{groutingQuantity},</if>
+            <if test="investCapital != null">invest_capital = #{investCapital},</if>
+            <if test="zoonType != null">zoon_type = #{zoonType},</if>
+            <if test="zoonGovernNumber != null">zoon_govern_number = #{zoonGovernNumber},</if>
+            <if test="zoonGovernType != null">zoon_govern_type = #{zoonGovernType},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="oneDetrimentLength != null">one_detriment_length = #{oneDetrimentLength},</if>
+            <if test="twoDetrimentLength != null">two_detriment_length = #{twoDetrimentLength},</if>
+            <if test="threeDetrimentLength != null">three_detriment_length = #{threeDetrimentLength},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBReservoirPreventionById" parameterType="Long">
+        delete from b_reservoir_prevention where id = #{id}
+    </delete>
+
+    <delete id="deleteBReservoirPreventionByIds" parameterType="String">
+        delete from b_reservoir_prevention where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

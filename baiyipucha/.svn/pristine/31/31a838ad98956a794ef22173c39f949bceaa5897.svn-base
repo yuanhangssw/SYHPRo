@@ -1,0 +1,207 @@
+package com.ruoyi.web.controller.termite;
+
+import java.io.DataInput;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletResponse;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ruoyi.common.core.domain.entity.SysDept;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.system.domain.*;
+import com.ruoyi.system.service.*;
+import com.ruoyi.web.controller.termite.utils.MileageUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.common.core.page.TableDataInfo;
+
+/**
+ * 普查处管理Controller
+ * 
+ * @author ruoyi
+ * @date 2024-04-08
+ */
+@RestController
+@RequestMapping("/system/place")
+public class BPatrolUnitPlaceController extends BaseController
+{
+    @Autowired
+    private IBPatrolUnitPlaceService bPatrolUnitPlaceService;
+
+    @Autowired
+    private IBPatrolService bPatrolService;
+
+    @Autowired
+    private IBAuditService ibAuditService;
+    @Autowired
+    private IBProjectService projectService;
+    @Autowired
+    private IBPatrolFileService fileService;
+
+    @Autowired
+    ISysDeptService deptService;
+
+    /**
+     * 查询普查处管理列表
+     */
+    @GetMapping("/list")
+    public TableDataInfo list(BPatrolUnitPlace bPatrolUnitPlace)
+    {
+        startPage();
+        List<BPatrolUnitPlaceAll> Alist= new ArrayList<>();
+        String patrolId = bPatrolUnitPlace.getPatrolId();
+        String[] idStrings = patrolId.split(",");
+        for (int j = 0; j < idStrings.length; j++) {
+            long[] patrolIds = new long[idStrings.length];
+            patrolIds[j] = Long.parseLong(idStrings[j].trim());
+            long id = patrolIds[j];
+            BPatrol bPatrol = bPatrolService.selectBPatrolById(id);
+            List<BPatrol> plist = bPatrolService.selectBPatrolList(bPatrol);
+            BPatrolUnitPlaceAll bPatrolUnitPlaceAll = new BPatrolUnitPlaceAll();
+            bPatrolUnitPlaceAll.setAddress(bPatrolUnitPlace.getPatrolAdress());
+            bPatrolUnitPlaceAll.setPatrolUnit(bPatrolUnitPlace.getPatrolUnit());
+            bPatrolUnitPlaceAll.setPatrolType(bPatrol.getPatrolType());
+            bPatrolUnitPlaceAll.setPatrols(plist);
+            Alist.add(bPatrolUnitPlaceAll);
+        }
+        return getDataTable(Alist);
+    }
+
+    /**
+     * 导出普查处管理列表
+     */
+    @Log(title = "普查处管理", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, BPatrolUnitPlace bPatrolUnitPlace)
+    {
+        List<BPatrolUnitPlace> list = bPatrolUnitPlaceService.selectBPatrolUnitPlaceList(bPatrolUnitPlace);
+        ExcelUtil<BPatrolUnitPlace> util = new ExcelUtil<BPatrolUnitPlace>(BPatrolUnitPlace.class);
+        util.exportExcel(response, list, "普查处管理数据");
+    }
+
+    /**
+     * 获取普查处管理详细信息
+     */
+    @GetMapping(value = "/{id}")
+    public AjaxResult getInfo(@PathVariable("id") Long id)
+    {
+        return success(bPatrolUnitPlaceService.selectBPatrolUnitPlaceById(id));
+    }
+
+    /**
+     * 新增普查处管理+新增巡查
+     */
+    @Log(title = "普查处管理", businessType = BusinessType.INSERT)
+    @PostMapping
+    public AjaxResult add(@RequestBody BPatrolUnitPlaceAll bPatrolUnitPlaceAll) throws IOException {
+        BPatrolUnitPlace bPatrolUnitPlace = new BPatrolUnitPlace();
+        bPatrolUnitPlace.setPatrolUnit(bPatrolUnitPlaceAll.getPatrolUnit());
+        List<BPatrol> bPatrols = bPatrolUnitPlaceAll.getPatrols();
+        String patrolIdsAsString = bPatrols.stream()
+            .map(BPatrol::getId)
+            .map(Object::toString)
+            .collect(Collectors.joining(","));
+        bPatrolUnitPlace.setPatrolId(patrolIdsAsString);
+        int res = bPatrolUnitPlaceService.insertBPatrolUnitPlace(bPatrolUnitPlace);
+
+        for (BPatrol bPatrol : bPatrols) {
+            bPatrol.setAuditStatus("1");
+            //提交数据的时候需要生成审核信息，根据当前提交人所在的部门生成。
+            bPatrol.setFreedom2(DateUtils.getTime());
+            bPatrol.setAddress(bPatrolUnitPlace.getPatrolAdress());
+            bPatrol.setPatrolUnit(bPatrolUnitPlace.getPatrolUnitName());
+            bPatrol.setPatrolType(bPatrolUnitPlace.getPatrolType());
+            int rss = bPatrolService.insertBPatrol(bPatrol);
+            try {
+                Long projectid = bPatrol.getProjectId();
+                BProject projectinfo = projectService.selectBProjectById(projectid);
+                SysDept dept = deptService.selectDeptById(projectinfo.getDeptId());
+                BAudit audit = new BAudit();
+                audit.setPatrolId(bPatrol.getId());
+                audit.setCurrentDept(dept.getDeptId());
+                audit.setSubordinateDept(dept.getParentId());
+                audit.setDataState(1l);
+                ibAuditService.insertBAudit(audit);
+            } catch (Exception e) {
+                System.out.println("生成审核信息出现错误。");
+            }
+
+            try {
+                if (!"".equals(bPatrol.getFreedom1())) {
+                    String[] filelist = bPatrol.getFreedom1().split(",");
+                    for (String s : filelist) {
+                        BPatrolFile file = new BPatrolFile();
+                        file.setPatorlId(bPatrol.getId());
+                        file.setFilePath(s);
+                        file.setDelFlag("0");
+                        fileService.insertBPatrolFile(file);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.printf("保存图片失败。");
+            }
+            return toAjax(rss);
+        }
+
+        return toAjax(res);
+    }
+
+    /**
+     * 修改普查处管理
+     */
+    @Log(title = "普查处管理", businessType = BusinessType.UPDATE)
+    @PutMapping
+    public AjaxResult edit(@RequestBody BPatrolUnitPlace bPatrolUnitPlace)
+    {
+        return toAjax(bPatrolUnitPlaceService.updateBPatrolUnitPlace(bPatrolUnitPlace));
+    }
+
+    /**
+     * 删除普查处管理
+     */
+    @Log(title = "普查处管理", businessType = BusinessType.DELETE)
+	@DeleteMapping("/{ids}")
+    public AjaxResult remove(@PathVariable Long[] ids)
+    {
+        BPatrolUnitPlace bPatrolUnitPlace = new BPatrolUnitPlace();
+        for (int i = 0; i < ids.length; i++) {
+            long id = ids[i];
+            bPatrolUnitPlace = bPatrolUnitPlaceService.selectBPatrolUnitPlaceById(id);
+            String PatrolsId = bPatrolUnitPlace.getPatrolId();
+            if (PatrolsId != null && !PatrolsId.isEmpty()) {
+                String[] idStrings = PatrolsId.split(",");
+                idStrings = Arrays.stream(idStrings).map(String::trim).toArray(String[]::new);
+            if (idStrings.length == 1) {
+                    long singleId = Long.parseLong(idStrings[0]);
+                    return toAjax(bPatrolService.deleteBPatrolById(singleId));
+            } else {
+                Long[] idArray = new Long[idStrings.length];
+                for (int j = 0; j < idStrings.length; j++) {
+                    idArray[j] = Long.parseLong(idStrings[j]);
+                    return toAjax(bPatrolService.deleteBPatrolByIds(idArray));
+                            }
+                        }
+                    }
+        }
+        return toAjax(bPatrolUnitPlaceService.deleteBPatrolUnitPlaceByIds(ids));
+    }
+}

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BInspectorMapper">
+    
+    <resultMap type="BInspector" id="BInspectorResult">
+        <result property="id"    column="id"    />
+        <result property="inspectorName"    column="inspector_name"    />
+        <result property="phone"    column="phone"    />
+        <result property="password"    column="password"    />
+        <result property="userId"    column="user_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="freedom1"    column="freedom1"    />
+        <result property="freedom2"    column="freedom2"    />
+        <result property="freedom3"    column="freedom3"    />
+        <result property="freedom4"    column="freedom4"    />
+        <result property="freedom5"    column="freedom5"    />
+        <result property="deptName"    column="dept_name"    />
+    </resultMap>
+
+    <sql id="selectBInspectorVo">
+        select id, inspector_name, phone, password, user_id, dept_id, del_flag, freedom1, freedom2, freedom3, freedom4, freedom5 from b_inspector
+    </sql>
+
+    <select id="selectBInspectorList" parameterType="BInspector" resultMap="BInspectorResult">
+        select inspector.id, inspector.inspector_name, inspector.phone, inspector.password, inspector.user_id, inspector.dept_id, inspector.del_flag, inspector.freedom1, inspector.freedom2, inspector.freedom3, inspector.freedom4, inspector.freedom5 ,dept.dept_name from b_inspector inspector INNER JOIN sys_dept dept on dept.dept_id=inspector.dept_id
+        <where>  
+            <if test="inspectorName != null  and inspectorName != ''"> and inspector.inspector_name like concat('%', #{inspectorName}, '%')</if>
+            <if test="phone != null  and phone != ''"> and inspector.phone = #{phone}</if>
+            <if test="password != null  and password != ''"> and inspector.password = #{password}</if>
+            <if test="userId != null "> and inspector.user_id = #{userId}</if>
+            <if test="deptId != null "> and inspector.dept_id = #{deptId}</if>
+            <if test="freedom1 != null  and freedom1 != ''"> and inspector.freedom1 = #{freedom1}</if>
+            <if test="freedom2 != null  and freedom2 != ''"> and inspector.freedom2 = #{freedom2}</if>
+            <if test="freedom3 != null  and freedom3 != ''"> and inspector.freedom3 = #{freedom3}</if>
+            <if test="freedom4 != null  and freedom4 != ''"> and inspector.freedom4 = #{freedom4}</if>
+            <if test="freedom5 != null  and freedom5 != ''"> and inspector.freedom5 = #{freedom5}</if>
+        </where>
+    </select>
+    
+    <select id="selectBInspectorById" parameterType="Long" resultMap="BInspectorResult">
+        <include refid="selectBInspectorVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBInspector" parameterType="BInspector" useGeneratedKeys="true" keyProperty="id">
+        insert into b_inspector
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="inspectorName != null">inspector_name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="password != null">password,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="freedom1 != null">freedom1,</if>
+            <if test="freedom2 != null">freedom2,</if>
+            <if test="freedom3 != null">freedom3,</if>
+            <if test="freedom4 != null">freedom4,</if>
+            <if test="freedom5 != null">freedom5,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="inspectorName != null">#{inspectorName},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="password != null">#{password},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="freedom1 != null">#{freedom1},</if>
+            <if test="freedom2 != null">#{freedom2},</if>
+            <if test="freedom3 != null">#{freedom3},</if>
+            <if test="freedom4 != null">#{freedom4},</if>
+            <if test="freedom5 != null">#{freedom5},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBInspector" parameterType="BInspector">
+        update b_inspector
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="inspectorName != null">inspector_name = #{inspectorName},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="freedom1 != null">freedom1 = #{freedom1},</if>
+            <if test="freedom2 != null">freedom2 = #{freedom2},</if>
+            <if test="freedom3 != null">freedom3 = #{freedom3},</if>
+            <if test="freedom4 != null">freedom4 = #{freedom4},</if>
+            <if test="freedom5 != null">freedom5 = #{freedom5},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBInspectorById" parameterType="Long">
+        delete from b_inspector where id = #{id}
+    </delete>
+
+    <delete id="deleteBInspectorByIds" parameterType="String">
+        delete from b_inspector where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

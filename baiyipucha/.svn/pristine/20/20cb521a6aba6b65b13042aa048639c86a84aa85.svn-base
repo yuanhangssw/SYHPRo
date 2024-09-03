@@ -1,0 +1,42 @@
+package com.ruoyi.system.domain;
+
+import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.List;
+
+/**
+ * 普查处管理对象 b_patrol_unit_place
+ * 
+ * @author ruoyi
+ * @date 2024-04-08
+ */
+public class BPatrolUnitPlaceAll extends BaseEntity
+{
+    private static final long serialVersionUID = 1L;
+
+    private BPatrolUnitPlace bPatrolUnitPlace;
+
+    private List<BPatrol> patrols;
+
+    public BPatrolUnitPlace getbPatrolUnitPlace() {
+        return bPatrolUnitPlace;
+    }
+
+    public void setbPatrolUnitPlace(BPatrolUnitPlace bPatrolUnitPlace) {
+        this.bPatrolUnitPlace = bPatrolUnitPlace;
+    }
+
+    public List<BPatrol> getPatrols() {
+        return patrols;
+    }
+
+    public void setPatrols(List<BPatrol> patrols) {
+        this.patrols = patrols;
+    }
+
+
+
+}

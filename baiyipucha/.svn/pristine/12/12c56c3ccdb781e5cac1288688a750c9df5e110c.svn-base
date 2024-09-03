@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BPatrolUnitMapper">
+
+    <resultMap type="BPatrolUnit" id="BPatrolUnitResult">
+        <result property="id"    column="id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="unitName"    column="unit_name"    />
+        <result property="projectType"    column="project_type"    />
+        <result property="damType"    column="dam_type"    />
+        <result property="damLength"    column="dam_length"    />
+        <result property="damHigth"    column="dam_higth"    />
+        <result property="slopeProtection"    column="slope_protection"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="freedom1"    column="freedom1"    />
+        <result property="freedom2"    column="freedom2"    />
+        <result property="freedom3"    column="freedom3"    />
+        <result property="freedom4"    column="freedom4"    />
+        <result property="freedom5"    column="freedom5"    />
+    </resultMap>
+
+    <sql id="selectBPatrolUnitVo">
+        select id, project_id, unit_name, project_type, dam_type, dam_length, dam_higth, slope_protection, del_flag, create_by, create_time, update_by, update_time, freedom1, freedom2, freedom3, freedom4, freedom5 from b_patrol_unit
+    </sql>
+
+    <select id="selectBPatrolUnitList" parameterType="BPatrolUnit" resultMap="BPatrolUnitResult">
+        <include refid="selectBPatrolUnitVo"/>
+        <where>
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="unitName != null  and unitName != ''"> and unit_name like concat('%', #{unitName}, '%')</if>
+            <if test="projectType != null "> and project_type = #{projectType}</if>
+            <if test="damType != null "> and dam_type = #{damType}</if>
+            <if test="damLength != null "> and dam_length = #{damLength}</if>
+            <if test="damHigth != null "> and dam_higth = #{damHigth}</if>
+            <if test="slopeProtection != null "> and slope_protection = #{slopeProtection}</if>
+            <if test="freedom1 != null  and freedom1 != ''"> and freedom1 = #{freedom1}</if>
+            <if test="freedom2 != null  and freedom2 != ''"> and freedom2 = #{freedom2}</if>
+            <if test="freedom3 != null  and freedom3 != ''"> and freedom3 = #{freedom3}</if>
+            <if test="freedom4 != null  and freedom4 != ''"> and freedom4 = #{freedom4}</if>
+            <if test="freedom5 != null  and freedom5 != ''"> and freedom5 = #{freedom5}</if>
+        </where>
+    </select>
+
+    <select id="selectBPatrolUnitById" parameterType="Long" resultMap="BPatrolUnitResult">
+        <include refid="selectBPatrolUnitVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBPatrolUnit" parameterType="BPatrolUnit" useGeneratedKeys="true" keyProperty="id">
+        insert into b_patrol_unit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="unitName != null">unit_name,</if>
+            <if test="projectType != null">project_type,</if>
+            <if test="damType != null">dam_type,</if>
+            <if test="damLength != null">dam_length,</if>
+            <if test="damHigth != null">dam_higth,</if>
+            <if test="slopeProtection != null">slope_protection,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="freedom1 != null">freedom1,</if>
+            <if test="freedom2 != null">freedom2,</if>
+            <if test="freedom3 != null">freedom3,</if>
+            <if test="freedom4 != null">freedom4,</if>
+            <if test="freedom5 != null">freedom5,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="unitName != null">#{unitName},</if>
+            <if test="projectType != null">#{projectType},</if>
+            <if test="damType != null">#{damType},</if>
+            <if test="damLength != null">#{damLength},</if>
+            <if test="damHigth != null">#{damHigth},</if>
+            <if test="slopeProtection != null">#{slopeProtection},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="freedom1 != null">#{freedom1},</if>
+            <if test="freedom2 != null">#{freedom2},</if>
+            <if test="freedom3 != null">#{freedom3},</if>
+            <if test="freedom4 != null">#{freedom4},</if>
+            <if test="freedom5 != null">#{freedom5},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBPatrolUnit" parameterType="BPatrolUnit">
+        update b_patrol_unit
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="unitName != null">unit_name = #{unitName},</if>
+            <if test="projectType != null">project_type = #{projectType},</if>
+            <if test="damType != null">dam_type = #{damType},</if>
+            <if test="damLength != null">dam_length = #{damLength},</if>
+            <if test="damHigth != null">dam_higth = #{damHigth},</if>
+            <if test="slopeProtection != null">slope_protection = #{slopeProtection},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="freedom1 != null">freedom1 = #{freedom1},</if>
+            <if test="freedom2 != null">freedom2 = #{freedom2},</if>
+            <if test="freedom3 != null">freedom3 = #{freedom3},</if>
+            <if test="freedom4 != null">freedom4 = #{freedom4},</if>
+            <if test="freedom5 != null">freedom5 = #{freedom5},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBPatrolUnitById" parameterType="Long">
+        delete from b_patrol_unit where id = #{id}
+    </delete>
+
+    <delete id="deleteBPatrolUnitByIds" parameterType="String">
+        delete from b_patrol_unit where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

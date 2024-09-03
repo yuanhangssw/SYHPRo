@@ -1,0 +1,63 @@
+{
+  "pages": [
+    "pages/login",
+    "pages/index1",
+    "pages/register",
+    "pages/index",
+    "pages/project/index",
+    "pages/message/index",
+    "pages/mine/index",
+    "pages/project/addOrupdate/index",
+    "pages/project/unitdetail/index",
+    "pages/common/addpatrol/index",
+    "pages/common/addpatrol/AddORDetail",
+    "pages/mine/avatar/index",
+    "pages/mine/info/index",
+    "pages/mine/info/edit",
+    "pages/mine/pwd/index",
+    "pages/mine/setting/index",
+    "pages/mine/help/index",
+    "pages/mine/about/index",
+    "pages/common/webview/index",
+    "pages/common/textview/index"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "RuoYi",
+    "navigationBarBackgroundColor": "#FFFFFF"
+  },
+  "tabBar": {
+    "color": "#000000",
+    "selectedColor": "#3E8DF6",
+    "borderStyle": "white",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index",
+        "iconPath": "static/images/tabbar/home.png",
+        "selectedIconPath": "static/images/tabbar/home_.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/project/index",
+        "iconPath": "static/images/tabbar/work.png",
+        "selectedIconPath": "static/images/tabbar/work_.png",
+        "text": "单元"
+      },
+      {
+        "pagePath": "pages/message/index",
+        "iconPath": "static/images/tabbar/message.png",
+        "selectedIconPath": "static/images/tabbar/message_.png",
+        "text": "消息"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "iconPath": "static/images/tabbar/mine.png",
+        "selectedIconPath": "static/images/tabbar/mine_.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "usingComponents": {}
+}
