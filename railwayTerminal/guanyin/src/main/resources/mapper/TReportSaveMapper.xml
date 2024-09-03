@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.TReportSaveMapper">
+
+    <resultMap type="com.tianji.dam.domain.TReportSave" id="TReportSaveResult">
+        <result property="id" column="id"/>
+        <result property="damgid" column="damgid"/>
+        <result property="types" column="types"/>
+        <result property="unitname" column="unitname"/>
+        <result property="areaname" column="areaname"/>
+        <result property="partname" column="partname"/>
+        <result property="sgtime" column="sgtime"/>
+        <result property="zhuanghao" column="zhuanghao"/>
+        <result property="gaocheng" column="gaocheng"/>
+        <result property="bianshu" column="bianshu"/>
+        <result property="mianji" column="mianji"/>
+        <result property="base64" column="base64"/>
+        <result property="param1" column="param1"/>
+        <result property="param2" column="param2"/>
+        <result property="param3" column="param3"/>
+        <result property="param4" column="param4"/>
+        <result property="param5" column="param5"/>
+        <result property="param6" column="param6"/>
+        <result property="param7" column="param7"/>
+        <result property="param8" column="param8"/>
+        <result property="param9" column="param9"/>
+        <result property="param10" column="param10"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="selectTReportSaveVo">
+        select id, damgid, types, unitname, areaname, partname, sgtime, zhuanghao, gaocheng, bianshu, mianji, base64,
+        param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, create_time, create_by, status
+        from t_report_save
+    </sql>
+
+    <select id="selectTReportSaveList" parameterType="com.tianji.dam.domain.TReportSave" resultMap="TReportSaveResult">
+        <include refid="selectTReportSaveVo"/>
+        <where>
+            <if test="damgid != null ">and damgid = #{damgid}</if>
+            <if test="types != null ">and types = #{types}</if>
+            <if test="unitname != null  and unitname != ''">and unitname like concat('%', #{unitname}, '%')</if>
+            <if test="areaname != null  and areaname != ''">and areaname like concat('%', #{areaname}, '%')</if>
+            <if test="partname != null  and partname != ''">and partname like concat('%', #{partname}, '%')</if>
+            <if test="sgtime != null ">and sgtime = #{sgtime}</if>
+            <if test="zhuanghao != null  and zhuanghao != ''">and zhuanghao = #{zhuanghao}</if>
+            <if test="gaocheng != null  and gaocheng != ''">and gaocheng = #{gaocheng}</if>
+            <if test="bianshu != null  and bianshu != ''">and bianshu = #{bianshu}</if>
+            <if test="mianji != null  and mianji != ''">and mianji = #{mianji}</if>
+            <if test="base64 != null  and base64 != ''">and base64 = #{base64}</if>
+            <if test="param1 != null  and param1 != ''">and param1 = #{param1}</if>
+            <if test="param2 != null  and param2 != ''">and param2 = #{param2}</if>
+            <if test="param3 != null  and param3 != ''">and param3 = #{param3}</if>
+            <if test="param4 != null  and param4 != ''">and param4 = #{param4}</if>
+            <if test="param5 != null  and param5 != ''">and param5 = #{param5}</if>
+            <if test="param6 != null  and param6 != ''">and param6 = #{param6}</if>
+            <if test="param7 != null  and param7 != ''">and param7 = #{param7}</if>
+            <if test="param8 != null  and param8 != ''">and param8 = #{param8}</if>
+            <if test="param9 != null  and param9 != ''">and param9 = #{param9}</if>
+            <if test="param10 != null  and param10 != ''">and param10 = #{param10}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectTReportSaveById" parameterType="Long" resultMap="TReportSaveResult">
+        <include refid="selectTReportSaveVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="seletbyDamAndType" resultMap="TReportSaveResult">
+
+        select * from t_report_save where damgid=#{param1} and types = #{param2}
+
+    </select>
+
+    <select id="selectTReportSaveListByAreaReportInfo" parameterType="com.tianji.dam.domain.AreaReportInfo" resultMap="TReportSaveResult">
+
+        select t.damgid, d.`status` ,d.title,m.materialname,t.id,t.types,t.unitname,t.areaname,t.partname,t.sgtime,t.zhuanghao,t.gaocheng,t.bianshu,t.mianji,
+        t.base64, t.param1, t.param2,t.param3, t.param4, t.param5, t.param6, t.param7, t.param8, t.param9, t.param10, t.create_time, t.create_by, t.status
+        from  t_damsconstruction d
+        LEFT JOIN t_report_save t on  t.damgid=d.id
+        LEFT JOIN t_material  m on t.types=m.id
+        <where>
+            <if test="pid !=null">
+                and  d.pid=#{pid}
+            </if>
+            <if test="ceng !=null and ceng !='' ">
+                and  d.engcode=#{ceng}
+            </if>
+            <if test="types !=null">
+                and   t.types=#{types}
+            </if>
+            <if test="title !=null">
+                and   d.title like concat('%',#{title},'%')
+            </if>
+
+            <if test="bianshurate1 !=null">
+                and    CAST(t.base64->'$.bianshurate' as UNSIGNED)   &gt;= #{bianshurate1}
+            </if>
+            <if test="bianshurate2 !=null">
+                and    CAST(t.base64->'$.bianshurate' as UNSIGNED) &lt;= #{bianshurate2}
+            </if>
+            <if test="starttime !=null">
+                and   t.base64->>'$.starttime'&gt;=#{starttime}
+            </if>
+            <if test="endtime !=null">
+                and   t.base64->>'$.starttime'&lt;=#{endtime}
+            </if>
+            <if test="speed !=null">
+                and  t.base64->>'$.avgspeed'   &gt;= #{speed}
+            </if>
+
+
+        </where>
+
+    </select>
+
+    <insert id="insertTReportSave" parameterType="com.tianji.dam.domain.TReportSave" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_report_save
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="damgid != null">damgid,</if>
+            <if test="types != null">types,</if>
+            <if test="unitname != null">unitname,</if>
+            <if test="areaname != null">areaname,</if>
+            <if test="partname != null">partname,</if>
+            <if test="sgtime != null">sgtime,</if>
+            <if test="zhuanghao != null">zhuanghao,</if>
+            <if test="gaocheng != null">gaocheng,</if>
+            <if test="bianshu != null">bianshu,</if>
+            <if test="mianji != null">mianji,</if>
+            <if test="base64 != null">base64,</if>
+            <if test="param1 != null">param1,</if>
+            <if test="param2 != null">param2,</if>
+            <if test="param3 != null">param3,</if>
+            <if test="param4 != null">param4,</if>
+            <if test="param5 != null">param5,</if>
+            <if test="param6 != null">param6,</if>
+            <if test="param7 != null">param7,</if>
+            <if test="param8 != null">param8,</if>
+            <if test="param9 != null">param9,</if>
+            <if test="param10 != null">param10,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="damgid != null">#{damgid},</if>
+            <if test="types != null">#{types},</if>
+            <if test="unitname != null">#{unitname},</if>
+            <if test="areaname != null">#{areaname},</if>
+            <if test="partname != null">#{partname},</if>
+            <if test="sgtime != null">#{sgtime},</if>
+            <if test="zhuanghao != null">#{zhuanghao},</if>
+            <if test="gaocheng != null">#{gaocheng},</if>
+            <if test="bianshu != null">#{bianshu},</if>
+            <if test="mianji != null">#{mianji},</if>
+            <if test="base64 != null">#{base64},</if>
+            <if test="param1 != null">#{param1},</if>
+            <if test="param2 != null">#{param2},</if>
+            <if test="param3 != null">#{param3},</if>
+            <if test="param4 != null">#{param4},</if>
+            <if test="param5 != null">#{param5},</if>
+            <if test="param6 != null">#{param6},</if>
+            <if test="param7 != null">#{param7},</if>
+            <if test="param8 != null">#{param8},</if>
+            <if test="param9 != null">#{param9},</if>
+            <if test="param10 != null">#{param10},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="status != null">#{status},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTReportSave" parameterType="com.tianji.dam.domain.TReportSave">
+        update t_report_save
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="damgid != null">damgid = #{damgid},</if>
+            <if test="types != null">types = #{types},</if>
+            <if test="unitname != null">unitname = #{unitname},</if>
+            <if test="areaname != null">areaname = #{areaname},</if>
+            <if test="partname != null">partname = #{partname},</if>
+            <if test="sgtime != null">sgtime = #{sgtime},</if>
+            <if test="zhuanghao != null">zhuanghao = #{zhuanghao},</if>
+            <if test="gaocheng != null">gaocheng = #{gaocheng},</if>
+            <if test="bianshu != null">bianshu = #{bianshu},</if>
+            <if test="mianji != null">mianji = #{mianji},</if>
+            <if test="base64 != null">base64 = #{base64},</if>
+            <if test="param1 != null">param1 = #{param1},</if>
+            <if test="param2 != null">param2 = #{param2},</if>
+            <if test="param3 != null">param3 = #{param3},</if>
+            <if test="param4 != null">param4 = #{param4},</if>
+            <if test="param5 != null">param5 = #{param5},</if>
+            <if test="param6 != null">param6 = #{param6},</if>
+            <if test="param7 != null">param7 = #{param7},</if>
+            <if test="param8 != null">param8 = #{param8},</if>
+            <if test="param9 != null">param9 = #{param9},</if>
+            <if test="param10 != null">param10 = #{param10},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTReportSaveById">
+        delete from t_report_save where damgid = #{param1} and types =#{param2}
+    </delete>
+
+    <delete id="deleteTReportSaveByIds" parameterType="String">
+        delete from t_report_save where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

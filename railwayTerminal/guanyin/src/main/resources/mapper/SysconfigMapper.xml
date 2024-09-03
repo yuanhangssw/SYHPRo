@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.SysconfigMapper">
+  <resultMap id="BaseResultMap" type="com.tianji.dam.domain.Sysconfig">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="sysConfig_name" jdbcType="VARCHAR" property="sysconfigName" />
+    <result column="sys_key" jdbcType="VARCHAR" property="sysKey" />
+    <result column="sys_keyValue" jdbcType="VARCHAR" property="sysKeyvalue" />
+    <result column="createdBy" jdbcType="VARCHAR" property="createdby" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="updateBy" jdbcType="VARCHAR" property="updateby" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="defaultValue" jdbcType="VARCHAR" property="defaultvalue" />
+  </resultMap>   
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, sysConfig_name, sys_key, sys_keyValue, createdBy, createTime, updateBy, updateTime, 
+    remark, defaultValue
+  </sql>
+  <select id="selectByExample" parameterType="com.tianji.dam.domain.SysconfigExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sysconfig
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sysconfig
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectBySyskey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from sysconfig
+    where sys_key = #{sysKey,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sysconfig
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.tianji.dam.domain.SysconfigExample">
+    delete from sysconfig
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.tianji.dam.domain.Sysconfig">
+    insert into sysconfig (id, sysConfig_name, sys_key, 
+      sys_keyValue, createdBy, createTime, 
+      updateBy, updateTime, remark, 
+      defaultValue)
+    values (#{id,jdbcType=INTEGER}, #{sysconfigName,jdbcType=VARCHAR}, #{sysKey,jdbcType=VARCHAR}, 
+      #{sysKeyvalue,jdbcType=VARCHAR}, #{createdby,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{updateby,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{defaultvalue,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tianji.dam.domain.Sysconfig">
+    insert into sysconfig
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="sysconfigName != null">
+        sysConfig_name,
+      </if>
+      <if test="sysKey != null">
+        sys_key,
+      </if>
+      <if test="sysKeyvalue != null">
+        sys_keyValue,
+      </if>
+      <if test="createdby != null">
+        createdBy,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="updateby != null">
+        updateBy,
+      </if>
+      <if test="updatetime != null">
+        updateTime,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="defaultvalue != null">
+        defaultValue,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="sysconfigName != null">
+        #{sysconfigName,jdbcType=VARCHAR},
+      </if>
+      <if test="sysKey != null">
+        #{sysKey,jdbcType=VARCHAR},
+      </if>
+      <if test="sysKeyvalue != null">
+        #{sysKeyvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateby != null">
+        #{updateby,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultvalue != null">
+        #{defaultvalue,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.tianji.dam.domain.SysconfigExample" resultType="java.lang.Long">
+    select count(*) from sysconfig
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+    <update id="updateByExampleSelective" parameterType="map">
+    update sysconfig
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.sysconfigName != null">
+        sysConfig_name = #{record.sysconfigName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sysKey != null">
+        sys_key = #{record.sysKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sysKeyvalue != null">
+        sys_keyValue = #{record.sysKeyvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdby != null">
+        createdBy = #{record.createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createtime != null">
+        createTime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateby != null">
+        updateBy = #{record.updateby,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatetime != null">
+        updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.defaultvalue != null">
+        defaultValue = #{record.defaultvalue,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sysconfig
+    set id = #{record.id,jdbcType=INTEGER},
+      sysConfig_name = #{record.sysconfigName,jdbcType=VARCHAR},
+      sys_key = #{record.sysKey,jdbcType=VARCHAR},
+      sys_keyValue = #{record.sysKeyvalue,jdbcType=VARCHAR},
+      createdBy = #{record.createdby,jdbcType=VARCHAR},
+      createTime = #{record.createtime,jdbcType=TIMESTAMP},
+      updateBy = #{record.updateby,jdbcType=VARCHAR},
+      updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      defaultValue = #{record.defaultvalue,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tianji.dam.domain.Sysconfig">
+    update sysconfig
+    <set>
+      <if test="sysconfigName != null">
+        sysConfig_name = #{sysconfigName,jdbcType=VARCHAR},
+      </if>
+      <if test="sysKey != null">
+        sys_key = #{sysKey,jdbcType=VARCHAR},
+      </if>
+      <if test="sysKeyvalue != null">
+        sys_keyValue = #{sysKeyvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="createdby != null">
+        createdBy = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateby != null">
+        updateBy = #{updateby,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultvalue != null">
+        defaultValue = #{defaultvalue,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tianji.dam.domain.Sysconfig">
+    update sysconfig
+    set sysConfig_name = #{sysconfigName,jdbcType=VARCHAR},
+      sys_key = #{sysKey,jdbcType=VARCHAR},
+      sys_keyValue = #{sysKeyvalue,jdbcType=VARCHAR},
+      createdBy = #{createdby,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateBy = #{updateby,jdbcType=VARCHAR},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      defaultValue = #{defaultvalue,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

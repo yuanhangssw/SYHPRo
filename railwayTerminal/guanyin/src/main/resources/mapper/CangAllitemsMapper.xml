@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.CangAllitemsMapper">
+    
+    <resultMap type="com.tianji.dam.domain.CangAllitems" id="CangAllitemsResult">
+        <result property="id"    column="id"    />
+        <result property="px"    column="px"    />
+        <result property="py"    column="py"    />
+        <result property="pz"    column="pz"    />
+        <result property="carid"    column="carid"    />
+        <result property="speed"    column="speed"    />
+        <result property="vcv"    column="vcv"    />
+        <result property="times"    column="times"    />
+    </resultMap>
+
+    <sql id="selectCangAllitemsVo">
+        select id, px, py, pz, carid, speed, vcv, times from cang_allitems
+    </sql>
+
+    <select id="selectCangAllitemsList" parameterType="com.tianji.dam.domain.CangAllitems" resultMap="CangAllitemsResult">
+        <include refid="selectCangAllitemsVo"/>
+        <where>  
+            <if test="px != null "> and px = #{px}</if>
+            <if test="py != null "> and py = #{py}</if>
+            <if test="pz != null "> and pz = #{pz}</if>
+            <if test="carid != null "> and carid = #{carid}</if>
+            <if test="speed != null "> and speed = #{speed}</if>
+            <if test="vcv != null "> and vcv = #{vcv}</if>
+            <if test="times != null "> and times = #{times}</if>
+        </where>
+    </select>
+    
+    <select id="selectCangAllitemsById" parameterType="Long" resultMap="CangAllitemsResult">
+        <include refid="selectCangAllitemsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCangAllitems" parameterType="com.tianji.dam.domain.CangAllitems">
+        insert into cang_allitems
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="px != null">px,</if>
+            <if test="py != null">py,</if>
+            <if test="pz != null">pz,</if>
+            <if test="carid != null">carid,</if>
+            <if test="speed != null">speed,</if>
+            <if test="vcv != null">vcv,</if>
+            <if test="times != null">times,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="px != null">#{px},</if>
+            <if test="py != null">#{py},</if>
+            <if test="pz != null">#{pz},</if>
+            <if test="carid != null">#{carid},</if>
+            <if test="speed != null">#{speed},</if>
+            <if test="vcv != null">#{vcv},</if>
+            <if test="times != null">#{times},</if>
+         </trim>
+    </insert>
+
+    <insert id="inserbatch" >
+        insert into ${tablename}
+       ( px, py,pz,carid,speed, vcv,times) VALUES
+        <foreach collection="datalist" item="item" index="index" separator=",">
+            ( #{item.px}, #{item.py}, #{item.pz},#{item.carid}, #{item.speed}, #{item.vcv},#{item.times})
+        </foreach>
+
+    </insert>
+
+
+    <update id="updateCangAllitems" parameterType="com.tianji.dam.domain.CangAllitems">
+        update cang_allitems
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="px != null">px = #{px},</if>
+            <if test="py != null">py = #{py},</if>
+            <if test="pz != null">pz = #{pz},</if>
+            <if test="carid != null">carid = #{carid},</if>
+            <if test="speed != null">speed = #{speed},</if>
+            <if test="vcv != null">vcv = #{vcv},</if>
+            <if test="times != null">times = #{times},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCangAllitemsById" parameterType="Long">
+        delete from cang_allitems where id = #{id}
+    </delete>
+
+    <delete id="deleteCangAllitemsByIds" parameterType="String">
+        delete from cang_allitems where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

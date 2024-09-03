@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.DayVolumeMapper">
+    
+    <resultMap type="com.tianji.dam.domain.DayVolume" id="DayVolumeResult">
+        <result property="gid"    column="gid"    />
+        <result property="days"    column="days"    />
+        <result property="volume"    column="volume"    />
+        <result property="totalvolume"    column="totalvolume"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="freedom1"    column="freedom1"    />
+        <result property="freedom2"    column="freedom2"    />
+        <result property="freedom3"    column="freedom3"    />
+    </resultMap>
+
+    <sql id="selectDayVolumeVo">
+        select gid, days, volume, totalvolume, create_time, create_user, freedom1, freedom2, freedom3 from t_day_volume
+    </sql>
+
+    <select id="selectDayVolumeList" parameterType="com.tianji.dam.domain.DayVolume" resultMap="DayVolumeResult">
+        <include refid="selectDayVolumeVo"/>
+        <where>  
+            <if test="days != null  and days != ''"> and days = #{days}</if>
+            <if test="volume != null "> and volume = #{volume}</if>
+            <if test="totalvolume != null "> and totalvolume = #{totalvolume}</if>
+            <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
+            <if test="freedom1 != null  and freedom1 != ''"> and freedom1 = #{freedom1}</if>
+            <if test="freedom2 != null  and freedom2 != ''"> and freedom2 = #{freedom2}</if>
+            <if test="freedom3 != null  and freedom3 != ''"> and freedom3 = #{freedom3}</if>
+        </where>
+        order by days desc
+    </select>
+
+    <select id="selectlast30" resultMap="DayVolumeResult">
+        select gid, days, volume, totalvolume, create_time, create_user, freedom1, freedom2,freedom3
+         from t_day_volume
+         WHERE create_time >= CURDATE() - INTERVAL 30 DAY
+    </select>
+
+    <select id="selectDayVolumeByGid" parameterType="Long" resultMap="DayVolumeResult">
+        <include refid="selectDayVolumeVo"/>
+        where gid = #{gid}
+    </select>
+        
+    <insert id="insertDayVolume" parameterType="com.tianji.dam.domain.DayVolume" useGeneratedKeys="true" keyProperty="gid">
+        insert into t_day_volume
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="days != null">days,</if>
+            <if test="volume != null">volume,</if>
+            <if test="totalvolume != null">totalvolume,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="freedom1 != null">freedom1,</if>
+            <if test="freedom2 != null">freedom2,</if>
+            <if test="freedom3 != null">freedom3,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="days != null">#{days},</if>
+            <if test="volume != null">#{volume},</if>
+            <if test="totalvolume != null">#{totalvolume},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="freedom1 != null">#{freedom1},</if>
+            <if test="freedom2 != null">#{freedom2},</if>
+            <if test="freedom3 != null">#{freedom3},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDayVolume" parameterType="com.tianji.dam.domain.DayVolume">
+        update t_day_volume
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="days != null">days = #{days},</if>
+            <if test="volume != null">volume = #{volume},</if>
+            <if test="totalvolume != null">totalvolume = #{totalvolume},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="freedom1 != null">freedom1 = #{freedom1},</if>
+            <if test="freedom2 != null">freedom2 = #{freedom2},</if>
+            <if test="freedom3 != null">freedom3 = #{freedom3},</if>
+        </trim>
+        where gid = #{gid}
+    </update>
+
+    <delete id="deleteDayVolumeByGid" parameterType="Long">
+        delete from t_day_volume where gid = #{gid}
+    </delete>
+
+    <delete id="deleteDayVolumeByGids" parameterType="String">
+        delete from t_day_volume where gid in 
+        <foreach item="gid" collection="array" open="(" separator="," close=")">
+            #{gid}
+        </foreach>
+    </delete>
+</mapper>

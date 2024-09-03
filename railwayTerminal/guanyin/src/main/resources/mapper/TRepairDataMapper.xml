@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.TRepairDataMapper">
+    <resultMap id="BaseResultMap" type="com.tianji.dam.domain.TRepairData">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="damsid" jdbcType="INTEGER" property="damsid"/>
+        <result column="ranges" jdbcType="VARCHAR" property="ranges"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="color_id" jdbcType="INTEGER" property="colorId"/>
+        <result column="speed" jdbcType="DOUBLE" property="speed"/>
+        <result column="vibration" jdbcType="DOUBLE" property="vibration"/>
+        <result column="start_time" jdbcType="VARCHAR" property="startTime"/>
+        <result column="end_time" jdbcType="VARCHAR" property="endTime"/>
+        <result column="repair_time" jdbcType="VARCHAR" property="repairTime"/>
+        <result column="materialname" jdbcType="VARCHAR" property="materialname"/>
+        <result column="xbegin" jdbcType="DOUBLE" property="xbegin"/>
+        <result column="xend" jdbcType="DOUBLE" property="xend"/>
+        <result column="ybegin" jdbcType="DOUBLE" property="ybegin"/>
+        <result column="yend" jdbcType="DOUBLE" property="yend"/>
+        <result column="cartype" jdbcType="INTEGER" property="cartype"/>
+        <result column="repairtype" jdbcType="INTEGER" property="repairtype"/>
+        <result column="carid" jdbcType="INTEGER" property="carid"/>
+        <result column="cartype" jdbcType="INTEGER" property="cartype"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, damsid, ranges, title, color_id, speed, vibration, start_time, end_time, repair_time,
+        materialname, xbegin, xend, ybegin, yend,repairtype,carid,cartype
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_repair_data
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from t_repair_data
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.tianji.dam.domain.TRepairData"
+            useGeneratedKeys="true">
+        insert into t_repair_data (damsid, ranges, title,
+        color_id, speed, vibration,
+        start_time, end_time, repair_time,
+        materialname, xbegin, xend,
+        ybegin, yend,repairtype,carid,cartype)
+        values (#{damsid,jdbcType=INTEGER}, #{ranges,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
+        #{colorId,jdbcType=INTEGER}, #{speed,jdbcType=DOUBLE}, #{vibration,jdbcType=DOUBLE},
+        #{startTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, #{repairTime,jdbcType=VARCHAR},
+        #{materialname,jdbcType=VARCHAR}, #{xbegin,jdbcType=DOUBLE}, #{xend,jdbcType=DOUBLE},
+        #{ybegin,jdbcType=DOUBLE}, #{yend,jdbcType=DOUBLE}),#{repairtype,jdbcType=INTEGER},
+        #{carid,jdbcType=INTEGER},#{cartype,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.tianji.dam.domain.TRepairData"
+            useGeneratedKeys="true">
+        insert into t_repair_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="damsid != null">
+                damsid,
+            </if>
+            <if test="ranges != null">
+                ranges,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="colorId != null">
+                color_id,
+            </if>
+            <if test="speed != null">
+                speed,
+            </if>
+            <if test="vibration != null">
+                vibration,
+            </if>
+            <if test="startTime != null">
+                start_time,
+            </if>
+            <if test="endTime != null">
+                end_time,
+            </if>
+            <if test="repairTime != null">
+                repair_time,
+            </if>
+            <if test="materialname != null">
+                materialname,
+            </if>
+            <if test="xbegin != null">
+                xbegin,
+            </if>
+            <if test="xend != null">
+                xend,
+            </if>
+            <if test="ybegin != null">
+                ybegin,
+            </if>
+            <if test="yend != null">
+                yend,
+            </if>
+            <if test="repairtype != null">
+                repairtype,
+            </if>
+            <if test="carid != null">
+                carid,
+            </if>
+            <if test="cartype != null">
+                cartype,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="damsid != null">
+                #{damsid,jdbcType=INTEGER},
+            </if>
+            <if test="ranges != null">
+                #{ranges,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="colorId != null">
+                #{colorId,jdbcType=INTEGER},
+            </if>
+            <if test="speed != null">
+                #{speed,jdbcType=DOUBLE},
+            </if>
+            <if test="vibration != null">
+                #{vibration,jdbcType=DOUBLE},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=VARCHAR},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=VARCHAR},
+            </if>
+            <if test="repairTime != null">
+                #{repairTime,jdbcType=VARCHAR},
+            </if>
+            <if test="materialname != null">
+                #{materialname,jdbcType=VARCHAR},
+            </if>
+            <if test="xbegin != null">
+                #{xbegin,jdbcType=DOUBLE},
+            </if>
+            <if test="xend != null">
+                #{xend,jdbcType=DOUBLE},
+            </if>
+            <if test="ybegin != null">
+                #{ybegin,jdbcType=DOUBLE},
+            </if>
+            <if test="yend != null">
+                #{yend,jdbcType=DOUBLE},
+            </if>
+
+            <if test="repairtype != null">
+                #{repairtype},
+            </if>
+            <if test="carid != null">
+                #{carid},
+            </if>
+            <if test="cartype != null">
+                #{cartype},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.tianji.dam.domain.TRepairData">
+        update t_repair_data
+        <set>
+            <if test="damsid != null">
+                damsid = #{damsid,jdbcType=INTEGER},
+            </if>
+            <if test="ranges != null">
+                ranges = #{ranges,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="colorId != null">
+                color_id = #{colorId,jdbcType=INTEGER},
+            </if>
+            <if test="speed != null">
+                speed = #{speed,jdbcType=DOUBLE},
+            </if>
+            <if test="vibration != null">
+                vibration = #{vibration,jdbcType=DOUBLE},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime,jdbcType=VARCHAR},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime,jdbcType=VARCHAR},
+            </if>
+            <if test="repairTime != null">
+                repair_time = #{repairTime,jdbcType=VARCHAR},
+            </if>
+            <if test="materialname != null">
+                materialname = #{materialname,jdbcType=VARCHAR},
+            </if>
+            <if test="xbegin != null">
+                xbegin = #{xbegin,jdbcType=DOUBLE},
+            </if>
+            <if test="xend != null">
+                xend = #{xend,jdbcType=DOUBLE},
+            </if>
+            <if test="ybegin != null">
+                ybegin = #{ybegin,jdbcType=DOUBLE},
+            </if>
+            <if test="yend != null">
+                yend = #{yend,jdbcType=DOUBLE},
+            </if>
+            <if test="repairtype != null">
+                repairtype= #{repairtype},
+            </if>
+            <if test="carid != null">
+                carid= #{carid},
+            </if>
+            <if test="cartype != null">
+                cartype= #{cartype},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.tianji.dam.domain.TRepairData">
+        update t_repair_data
+        set damsid = #{damsid,jdbcType=INTEGER},
+        ranges = #{ranges,jdbcType=VARCHAR},
+        title = #{title,jdbcType=VARCHAR},
+        color_id = #{colorId,jdbcType=INTEGER},
+        speed = #{speed,jdbcType=DOUBLE},
+        vibration = #{vibration,jdbcType=DOUBLE},
+        start_time = #{startTime,jdbcType=VARCHAR},
+        end_time = #{endTime,jdbcType=VARCHAR},
+        repair_time = #{repairTime,jdbcType=VARCHAR},
+        materialname = #{materialname,jdbcType=VARCHAR},
+        xbegin = #{xbegin,jdbcType=DOUBLE},
+        xend = #{xend,jdbcType=DOUBLE},
+        ybegin = #{ybegin,jdbcType=DOUBLE},
+        yend = #{yend,jdbcType=DOUBLE}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectTRepairDatas" parameterType="com.tianji.dam.domain.TRepairData" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_repair_data
+        <where>
+            <if test="damsid != null">
+                and damsid = #{damsid,jdbcType=INTEGER}
+            </if>
+            <if test="cartype != null">
+                and cartype = #{cartype,jdbcType=INTEGER}
+            </if>
+            <if test="materialname != null">
+                and materialname = #{materialname,jdbcType=VARCHAR}
+            </if>
+            and (repairtype is null or repairtype =0)
+        </where>
+        order by repair_time desc
+    </select>
+
+    <select id="selectTRepairDatasList" parameterType="com.tianji.dam.domain.TRepairData" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_repair_data
+        <where>
+            <if test="damsid != null">
+                and damsid = #{damsid,jdbcType=INTEGER}
+            </if>
+            <if test="cartype != null">
+                and cartype = #{cartype}
+            </if>
+            <if test="materialname != null">
+                and materialname = #{materialname,jdbcType=VARCHAR}
+            </if>
+
+        </where>
+    </select>
+    <delete id="deleteByType" parameterType="com.tianji.dam.domain.TRepairData">
+
+        delete from t_repair_data where repairtype =1 and damsid=#{damsid} and carid =#{carid} and cartype =#{cartype}
+
+    </delete>
+
+
+</mapper>

@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.T1Mapper">
+
+    <!--查询-->
+    <!--FROM_UNIXTIME(CONVERT(`Timestamp`/1000 , signed),'%Y-%m-%d %H:%m:%s') as timestamp,
+    IF(isForward=0,'前进','后退') as isForward,-->
+    <select id="select" parameterType="com.tianji.dam.domain.vo.T1VO" resultType="com.tianji.dam.domain.T1">
+        select
+        id as id,
+        CoordX as coordX,
+        CoordY as coordY,
+        Latitude as latitude,
+        Longitude as longitude,
+        Elevation as elevation,
+        Timestamp as timestamp,
+        LengthVehicleID aslengthVehicleID,
+        VehicleID as vehicleID,
+        Speed as speed,
+        LayerID as layerID,
+        isForward as isForward,
+        IsVibrate as isVibrate,
+        VibrateValue as vibrateValue,
+        Frequency as frequency,
+        Acceleration as acceleration,
+        Amplitude as amplitude,
+        Satellites as satellites,
+        ZhuangX as zhuangX,
+        ZhuangY as zhuangY,
+        ishistory as ishistory,
+        materialname as materialname,
+        OrderNum as orderNum,
+        Angle as angle,
+        CoordLX as coordLX,
+        CoordLY as coordLY,
+        CoordRX as coordRX,
+        CoordRY as coordRY,
+        rangeStr as rangeStr,
+        zhuanghao as zhuanghao,
+        pianju as pianju,
+        houdu as houdu,
+        CurrentEvolution as currentEvolution
+        <choose>
+            <when test="tablename != null and tablename !=''">
+                from ${tablename}
+            </when>
+            <otherwise>
+                from t_1
+            </otherwise>
+        </choose>
+        where 1=1
+        <include refid="where"/>
+        <if test="sort == null">ORDER BY Timestamp DESC</if>
+        <if test="sort != null">ORDER BY Timestamp ASC</if>
+    </select>
+
+
+    <select id="selectrest" parameterType="com.tianji.dam.domain.vo.T1VO"
+            resultType="com.tianji.dam.domain.vo.T1RestAPI">
+        select
+        id as id,
+        CoordX as coordX,
+        CoordY as coordY,
+        Latitude as latitude,
+        Longitude as longitude,
+        Elevation as elevation,
+        Timestamp as timestamp,
+        LengthVehicleID aslengthVehicleID,
+        VehicleID as vehicleID,
+        Speed as speed,
+        LayerID as layerID,
+        isForward as isForward,
+        IsVibrate as isVibrate,
+        VibrateValue as vibrateValue,
+        Frequency as frequency,
+        Acceleration as acceleration,
+        Amplitude as amplitude,
+        Satellites as satellites,
+        ZhuangX as zhuangX,
+        ZhuangY as zhuangY,
+        ishistory as ishistory,
+        materialname as materialname,
+        OrderNum as orderNum,
+        Angle as angle,
+        CoordLX as coordLX,
+        CoordLY as coordLY,
+        CoordRX as coordRX,
+        CoordRY as coordRY,
+        BeforeCoordLX,
+        BeforeCoordLY,
+        BeforeCoordRX,
+        BeforeCoordRY,
+        rangeStr as rangeStr,
+        zhuanghao as zhuanghao,
+        pianju as pianju,
+        houdu as houdu
+        <choose>
+            <when test="tablename != null and tablename !=''">
+                from ${tablename}
+            </when>
+            <otherwise>
+                from ylj_t_1
+            </otherwise>
+        </choose>
+        where  Timestamp BETWEEN #{beginTime} and #{endTime}
+        <if test="vehicleID != null and vehicleID != 0 ">and VehicleID = #{vehicleID}</if>
+        <if test="sort == null">ORDER BY id DESC</if>
+        <if test="sort != null">ORDER BY Timestamp ASC</if>
+    </select>
+
+    <sql id="where">
+        <if test="vehicleID != null and vehicleID != 0 ">and VehicleID = #{vehicleID}</if>
+        <if test="elevation != null and elevation != 0 ">and Elevation = #{elevation}</if>
+        <if test="layerid != null and layerid != 0 ">and LayerID = #{layerid}</if>
+        <if test="startAltitude != null and startAltitude != '' ">
+            and Elevation <![CDATA[ >= ]]> #{startAltitude}
+        </if>
+        <if test="endAltitude != null and endAltitude != '' ">
+            and Elevation <![CDATA[ <= ]]> #{endAltitude}
+        </if>
+        <if test="beginTimestamp != null and beginTimestamp != '' ">
+            and FROM_UNIXTIME(CONVERT(Timestamp/1000 , signed),"%Y-%m-%d %H:%i:%s") <![CDATA[ >= ]]> #{beginTimestamp}
+        </if>
+        <if test="endTimestamp != null and endTimestamp != '' ">
+            and FROM_UNIXTIME(CONVERT(Timestamp/1000 , signed),"%Y-%m-%d %H:%i:%s") <![CDATA[ <= ]]> #{endTimestamp}
+        </if>
+        <if test="beginzhuanghao != null and beginzhuanghao != '' ">
+            and zhuanghao <![CDATA[ >= ]]> #{beginzhuanghao}
+        </if>
+        <if test="endzhuanghao != null and endzhuanghao != '' ">
+            and zhuanghao <![CDATA[ <= ]]> #{endzhuanghao}
+        </if>
+        <if test="speed1 != null and speed1 !=0  and speed2 == null">
+            and Speed <![CDATA[ >= ]]> #{speed1}
+        </if>
+        <if test="speed1 != null and speed1 !=0 and speed2 != null and speed2 !=0">
+            and Speed <![CDATA[ >= ]]> #{speed1} and Speed <![CDATA[ <= ]]> #{speed2}
+        </if>
+        <if test="speed1 == null  and speed2 != null and speed2 !=0">
+            and Speed <![CDATA[ <= ]]> #{speed2}
+        </if>
+
+    </sql>
+
+    <select id="selectByRanges" parameterType="com.tianji.dam.domain.vo.T1VO" resultType="com.tianji.dam.domain.T1">
+        <!-- select id,ZhuangX,ZhuangY,Elevation as elevation FROM t_1
+        WHERE materialname=#{materialname}
+        AND (Elevation-#{gaocheng}) <![CDATA[ <= ]]> #{cenggao}
+        AND (ZhuangX between #{xbegin} and #{xend})
+        AND (ZhuangY between #{ybegin} and #{yend}) -->
+
+        <!-- SELECT id,ZhuangX,ZhuangY,Elevation as elevation FROM t_1 WHERE
+           (ZhuangX between #{xbegin} and #{xend}) AND (ZhuangY between #{ybegin} and #{yend}) -->
+
+        <!--(ZhuangX between #{xbegin} and #{xend})
+        AND (ZhuangY between #{ybegin} and #{yend})-->
+        select id,ZhuangX,ZhuangY,Elevation as elevation FROM ${tablename}
+        WHERE Timestamp  <![CDATA[ >= ]]>  #{beginTime} AND Timestamp  <![CDATA[ <= ]]>  #{endTime}
+    </select>
+    <!--insert ignore into ${tablename} select * from  ${formname}-->
+    <insert id="addTableData" parameterType="com.tianji.dam.domain.vo.T1VO">
+        insert into ${tablename} (`CoordX`, `CoordY`, `Latitude`, `Longitude`, `Elevation`, `Timestamp`,
+        `LengthVehicleID`, `VehicleID`,
+        `Speed`, `LayerID`, `IsForward`, `IsVibrate`, `VibrateValue`, `Frequency`, `Acceleration`, `Amplitude`,
+        `Satellites`, `ZhuangX`, `ZhuangY`, `ishistory`, `materialname`, `OrderNum`, `Angle`, `CoordLX`, `CoordLY`,
+        `CoordRX`, `CoordRY`, `rangeStr`,zhuanghao,pianju,houdu,
+        CurrentEvolution,BeforeCoordLX,BeforeCoordLY,BeforeCoordRX,BeforeCoordRY,BeforeElevation,qhangle,zyangle)
+        select `CoordX`, `CoordY`, `Latitude`, `Longitude`, `Elevation`, `Timestamp`, `LengthVehicleID`, `VehicleID`,
+        `Speed`, `LayerID`, `IsForward`, `IsVibrate`, `VibrateValue`, `Frequency`, `Acceleration`, `Amplitude`,
+        `Satellites`, `ZhuangX`, `ZhuangY`, `ishistory`, `materialname`, `OrderNum`, `Angle`, `CoordLX`, `CoordLY`,
+        `CoordRX`, `CoordRY`, `rangeStr`,zhuanghao,pianju,houdu,
+        CurrentEvolution,BeforeCoordLX,BeforeCoordLY,BeforeCoordRX,BeforeCoordRY,BeforeElevation,qhangle,zyangle
+        from ${formname} WHERE id in
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </insert>
+
+    <select id="getRollingData" resultType="com.tianji.dam.domain.RollingData">
+        SELECT Acceleration,Frequency,Speed,`Timestamp`,VehicleID,VibrateValue,Elevation,ZhuangX,ZhuangY FROM
+        t_1
+        WHERE Elevation <![CDATA[ >= ]]> 0
+        AND ((VehicleID=1 AND FROM_UNIXTIME(CONVERT(Timestamp/1000 , signed),"%Y-%m-%d %H:%i:%s") <![CDATA[ >= ]]>
+        '2021-01-05' AND FROM_UNIXTIME(CONVERT(Timestamp/1000 , signed),"%Y-%m-%d %H:%i:%s")  <![CDATA[ <= ]]>
+        '2021-08-15')
+        OR (VehicleID=2 AND FROM_UNIXTIME(CONVERT(Timestamp/1000 , signed),"%Y-%m-%d %H:%i:%s") <![CDATA[ >= ]]>
+        '2021-01-05' AND FROM_UNIXTIME(CONVERT(Timestamp/1000 , signed),"%Y-%m-%d %H:%i:%s")  <![CDATA[ <= ]]>
+        '2021-08-15')
+        OR (VehicleID=3 AND FROM_UNIXTIME(CONVERT(Timestamp/1000 , signed),"%Y-%m-%d %H:%i:%s") <![CDATA[ >= ]]>
+        '2021-01-05' AND FROM_UNIXTIME(CONVERT(Timestamp/1000 , signed),"%Y-%m-%d %H:%i:%s")  <![CDATA[ <= ]]>
+        '2021-08-15'))
+    </select>
+
+
+    <select id="selectPage" parameterType="com.tianji.dam.domain.vo.T1VO" resultType="com.tianji.dam.domain.T1">
+        select
+        id as id,
+        CoordX as coordX,
+        CoordY as coordY,
+        Latitude as latitude,
+        Longitude as longitude,
+        Elevation as elevation,
+        Timestamp as timestamp,
+        LengthVehicleID aslengthVehicleID,
+        VehicleID as vehicleID,
+        Speed as speed,
+        LayerID as layerID,
+        isForward as isForward,
+        IsVibrate as isVibrate,
+        VibrateValue as vibrateValue,
+        Frequency as frequency,
+        Acceleration as acceleration,
+        Amplitude as amplitude,
+        Satellites as satellites,
+        ZhuangX as zhuangX,
+        ZhuangY as zhuangY,
+        ishistory as ishistory,
+        materialname as materialname,
+        OrderNum as orderNum,
+        Angle as angle,
+        CoordLX as coordLX,
+        CoordLY as coordLY,
+        CoordRX as coordRX,
+        CoordRY as coordRY,
+        rangeStr as rangeStr,
+        zhuanghao as zhuanghao,
+        pianju as pianju,
+        houdu as houdu,
+        CurrentEvolution,
+        BeforeCoordLX,
+        BeforeCoordLY,
+        BeforeCoordRX,
+        BeforeCoordRY,
+        BeforeElevation,
+        qhangle,
+        zyangle
+        <choose>
+            <when test="tablename != null and tablename !=''">
+                from ${tablename}
+            </when>
+            <otherwise>
+                from t_1
+            </otherwise>
+        </choose>
+        <where>
+            <if test="vehicleID != null and vehicleID != '' ">VehicleID in (${vehicleID})</if>
+
+            <if test="beginTime != null and beginTime != 0 ">
+                and `Timestamp` <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null and endTime != 0 ">
+                and `Timestamp` <![CDATA[ <= ]]> #{endTime}
+            </if>
+            <if test="beginElevation != null and beginElevation !=0 ">
+                and Elevation  <![CDATA[ >= ]]> #{beginElevation}
+            </if>
+            <if test="endElevation != null and endElevation!=0">
+                and Elevation <![CDATA[ <= ]]> #{endElevation}
+            </if>
+            <if test="timestamp == 0">ORDER BY `Timestamp` limit 0,1</if>
+            <if test="timestamp != 0">and `Timestamp` > ${timestamp} ORDER BY `Timestamp` limit ${pageSize}</if>
+        </where>
+    </select>
+
+    <select id="selectCangData" parameterType="com.tianji.dam.domain.vo.T1VO" resultType="com.tianji.dam.domain.T1">
+        select
+        id as id,
+        CoordX as coordX,
+        CoordY as coordY,
+        Latitude as latitude,
+        Longitude as longitude,
+        Elevation as elevation,
+        Timestamp as timestamp,
+        LengthVehicleID aslengthVehicleID,
+        VehicleID as vehicleID,
+        Speed as speed,
+        LayerID as layerID,
+        isForward as isForward,
+        IsVibrate as isVibrate,
+        VibrateValue as vibrateValue,
+        Frequency as frequency,
+        Acceleration as acceleration,
+        Amplitude as amplitude,
+        Satellites as satellites,
+        ZhuangX as zhuangX,
+        ZhuangY as zhuangY,
+        ishistory as ishistory,
+        materialname as materialname,
+        OrderNum as orderNum,
+        Angle as angle,
+        CoordLX as coordLX,
+        CoordLY as coordLY,
+        CoordRX as coordRX,
+        CoordRY as coordRY,
+        rangeStr as rangeStr,
+        zhuanghao as zhuanghao,
+        pianju as pianju,
+        houdu as houdu,
+        CurrentEvolution,
+        BeforeCoordLX,
+        BeforeCoordLY,
+        BeforeCoordRX,
+        BeforeCoordRY,
+        BeforeElevation,
+        qhangle,
+        zyangle
+        from ${tablename}
+        where  VehicleID =#{vehicleID}
+        order by  Timestamp
+
+    </select>
+
+
+
+
+    <update id="updateBatch" parameterType="com.tianji.dam.domain.T1">
+        update ${tablename}
+        set
+        zhuangX=${zhuangX},
+        zhuangY=${zhuangY}
+        where id = ${id}
+
+    </update>
+
+    <insert id="insertrollingdatabatch" parameterType="com.tianji.dam.domain.vo.RollingDataListVo">
+
+        insert into `${tableName}`
+        (
+        CoordX,CoordY,Latitude,Longitude,Elevation,Timestamp,LengthVehicleID,VehicleID,Speed,LayerID,
+        IsForward,IsVibrate,VibrateValue,Frequency,Acceleration,Amplitude,Satellites,ZhuangX,ZhuangY,
+        zhuanghao,pianju,houdu,ishistory,materialname,OrderNum,Angle,CoordLX,CoordLY,CoordRX,CoordRY,rangeStr,
+        CurrentEvolution,BeforeCoordLX,BeforeCoordLY,BeforeCoordRX,BeforeCoordRY,BeforeElevation,qhangle,zyangle
+        )
+        values
+        <foreach collection="dataList" item="rollingData" separator=",">
+            (
+            #{rollingData.CoordX},#{rollingData.CoordY},#{rollingData.Latitude},#{rollingData.Longitude},
+            #{rollingData.Elevation},#{rollingData.Timestamp},#{rollingData.LengthVehicleID},#{rollingData.VehicleID},
+            #{rollingData.Speed},#{rollingData.LayerID},#{rollingData.IsForward}, #{rollingData.IsVibrate},
+            #{rollingData.VibrateValue},#{rollingData.Frequency},#{rollingData.Acceleration},#{rollingData.Amplitude},
+            #{rollingData.Satellites},#{rollingData.ZhuangX},#{rollingData.ZhuangY},#{rollingData.zhuanghao},
+            #{rollingData.pianju},#{rollingData.houdu},#{rollingData.ishistory},#{rollingData.materialname},
+            #{rollingData.OrderNum},#{rollingData.Angle},#{rollingData.CoordLX},
+            #{rollingData.CoordLY},#{rollingData.CoordRX},#{rollingData.CoordRY},#{rollingData.rangeStr},
+            #{rollingData.CurrentEvolution},#{rollingData.BeforeCoordLX},#{rollingData.BeforeCoordLY},
+            #{rollingData.BeforeCoordRX},#{rollingData.BeforeCoordRY},#{rollingData.BeforeElevation},#{rollingData.qhangle},#{rollingData.zyangle}
+            )
+        </foreach>
+    </insert>
+
+
+    <update id="upt1zhuangxybatch" parameterType="java.util.List">
+
+        <foreach collection="list" item="rollingData" index="index" open="" close="" separator=";">
+            update t_1
+            <set>
+                ZhuangX=#{rollingData.zhuangX},
+                ZhuangY=#{rollingData.zhuangY},
+                zhuanghao=#{rollingData.zhuanghao},
+                pianju=#{rollingData.pianju}
+            </set>
+            where id = #{rollingData.id}
+        </foreach>
+    </update>
+
+
+</mapper>

@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.TTrackMapper">
+  <resultMap id="BaseResultMap" type="com.tianji.dam.domain.TTrack">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="CoordX" jdbcType="DOUBLE" property="coordx" />
+    <result column="CoordY" jdbcType="DOUBLE" property="coordy" />
+    <result column="Latitude" jdbcType="DOUBLE" property="latitude" />
+    <result column="Longitude" jdbcType="DOUBLE" property="longitude" />
+    <result column="Elevation" jdbcType="REAL" property="elevation" />
+    <result column="Timestamp" jdbcType="BIGINT" property="timestamp" />
+    <result column="VehicleID" jdbcType="VARCHAR" property="vehicleid" />
+    <result column="Speed" jdbcType="REAL" property="speed" />
+    <result column="LayerID" jdbcType="INTEGER" property="layerid" />
+    <result column="IsForward" jdbcType="INTEGER" property="isforward" />
+    <result column="IsVibrate" jdbcType="INTEGER" property="isvibrate" />
+    <result column="VibrateValue" jdbcType="DOUBLE" property="vibratevalue" />
+    <result column="Frequency" jdbcType="DOUBLE" property="frequency" />
+    <result column="Acceleration" jdbcType="DOUBLE" property="acceleration" />
+    <result column="Amplitude" jdbcType="DOUBLE" property="amplitude" />
+    <result column="Satellites" jdbcType="INTEGER" property="satellites" />
+    <result column="ZhuangX" jdbcType="DOUBLE" property="zhuangx" />
+    <result column="ZhuangY" jdbcType="DOUBLE" property="zhuangy" />
+    <result column="ishistory" jdbcType="INTEGER" property="ishistory" />
+    <result column="materialname" jdbcType="INTEGER" property="materialname" />
+    <result column="OrderNum" jdbcType="INTEGER" property="ordernum" />
+    <result column="Angle" jdbcType="REAL" property="angle" />
+    <result column="CoordLX" jdbcType="DOUBLE" property="coordlx" />
+    <result column="CoordLY" jdbcType="DOUBLE" property="coordly" />
+    <result column="CoordRX" jdbcType="DOUBLE" property="coordrx" />
+    <result column="CoordRY" jdbcType="DOUBLE" property="coordry" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, CoordX, CoordY, Latitude, Longitude, Elevation, Timestamp, VehicleID, Speed, 
+    LayerID, IsForward, IsVibrate, VibrateValue, Frequency, Acceleration, Amplitude, 
+    Satellites, ZhuangX, ZhuangY, ishistory, materialname, OrderNum, Angle, CoordLX, 
+    CoordLY, CoordRX, CoordRY
+  </sql>
+  <select id="selectByExample" parameterType="com.tianji.dam.domain.TTrackExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_track
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_track
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_track
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.tianji.dam.domain.TTrackExample">
+    delete from t_track
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.tianji.dam.domain.TTrack">
+    insert into t_track (id, CoordX, CoordY, 
+      Latitude, Longitude, Elevation, 
+      Timestamp, VehicleID, Speed, 
+      LayerID, IsForward, IsVibrate, 
+      VibrateValue, Frequency, Acceleration, 
+      Amplitude, Satellites, ZhuangX, 
+      ZhuangY, ishistory, materialname, 
+      OrderNum, Angle, CoordLX, 
+      CoordLY, CoordRX, CoordRY
+      )
+    values (#{id,jdbcType=INTEGER}, #{coordx,jdbcType=DOUBLE}, #{coordy,jdbcType=DOUBLE}, 
+      #{latitude,jdbcType=DOUBLE}, #{longitude,jdbcType=DOUBLE}, #{elevation,jdbcType=REAL}, 
+      #{timestamp,jdbcType=BIGINT}, #{vehicleid,jdbcType=VARCHAR}, #{speed,jdbcType=REAL}, 
+      #{layerid,jdbcType=INTEGER}, #{isforward,jdbcType=INTEGER}, #{isvibrate,jdbcType=INTEGER}, 
+      #{vibratevalue,jdbcType=DOUBLE}, #{frequency,jdbcType=DOUBLE}, #{acceleration,jdbcType=DOUBLE}, 
+      #{amplitude,jdbcType=DOUBLE}, #{satellites,jdbcType=INTEGER}, #{zhuangx,jdbcType=DOUBLE}, 
+      #{zhuangy,jdbcType=DOUBLE}, #{ishistory,jdbcType=INTEGER}, #{materialname,jdbcType=INTEGER}, 
+      #{ordernum,jdbcType=INTEGER}, #{angle,jdbcType=REAL}, #{coordlx,jdbcType=DOUBLE}, 
+      #{coordly,jdbcType=DOUBLE}, #{coordrx,jdbcType=DOUBLE}, #{coordry,jdbcType=DOUBLE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tianji.dam.domain.TTrack">
+    insert into t_track
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="coordx != null">
+        CoordX,
+      </if>
+      <if test="coordy != null">
+        CoordY,
+      </if>
+      <if test="latitude != null">
+        Latitude,
+      </if>
+      <if test="longitude != null">
+        Longitude,
+      </if>
+      <if test="elevation != null">
+        Elevation,
+      </if>
+      <if test="timestamp != null">
+        Timestamp,
+      </if>
+      <if test="vehicleid != null">
+        VehicleID,
+      </if>
+      <if test="speed != null">
+        Speed,
+      </if>
+      <if test="layerid != null">
+        LayerID,
+      </if>
+      <if test="isforward != null">
+        IsForward,
+      </if>
+      <if test="isvibrate != null">
+        IsVibrate,
+      </if>
+      <if test="vibratevalue != null">
+        VibrateValue,
+      </if>
+      <if test="frequency != null">
+        Frequency,
+      </if>
+      <if test="acceleration != null">
+        Acceleration,
+      </if>
+      <if test="amplitude != null">
+        Amplitude,
+      </if>
+      <if test="satellites != null">
+        Satellites,
+      </if>
+      <if test="zhuangx != null">
+        ZhuangX,
+      </if>
+      <if test="zhuangy != null">
+        ZhuangY,
+      </if>
+      <if test="ishistory != null">
+        ishistory,
+      </if>
+      <if test="materialname != null">
+        materialname,
+      </if>
+      <if test="ordernum != null">
+        OrderNum,
+      </if>
+      <if test="angle != null">
+        Angle,
+      </if>
+      <if test="coordlx != null">
+        CoordLX,
+      </if>
+      <if test="coordly != null">
+        CoordLY,
+      </if>
+      <if test="coordrx != null">
+        CoordRX,
+      </if>
+      <if test="coordry != null">
+        CoordRY,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="coordx != null">
+        #{coordx,jdbcType=DOUBLE},
+      </if>
+      <if test="coordy != null">
+        #{coordy,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="elevation != null">
+        #{elevation,jdbcType=REAL},
+      </if>
+      <if test="timestamp != null">
+        #{timestamp,jdbcType=BIGINT},
+      </if>
+      <if test="vehicleid != null">
+        #{vehicleid,jdbcType=VARCHAR},
+      </if>
+      <if test="speed != null">
+        #{speed,jdbcType=REAL},
+      </if>
+      <if test="layerid != null">
+        #{layerid,jdbcType=INTEGER},
+      </if>
+      <if test="isforward != null">
+        #{isforward,jdbcType=INTEGER},
+      </if>
+      <if test="isvibrate != null">
+        #{isvibrate,jdbcType=INTEGER},
+      </if>
+      <if test="vibratevalue != null">
+        #{vibratevalue,jdbcType=DOUBLE},
+      </if>
+      <if test="frequency != null">
+        #{frequency,jdbcType=DOUBLE},
+      </if>
+      <if test="acceleration != null">
+        #{acceleration,jdbcType=DOUBLE},
+      </if>
+      <if test="amplitude != null">
+        #{amplitude,jdbcType=DOUBLE},
+      </if>
+      <if test="satellites != null">
+        #{satellites,jdbcType=INTEGER},
+      </if>
+      <if test="zhuangx != null">
+        #{zhuangx,jdbcType=DOUBLE},
+      </if>
+      <if test="zhuangy != null">
+        #{zhuangy,jdbcType=DOUBLE},
+      </if>
+      <if test="ishistory != null">
+        #{ishistory,jdbcType=INTEGER},
+      </if>
+      <if test="materialname != null">
+        #{materialname,jdbcType=INTEGER},
+      </if>
+      <if test="ordernum != null">
+        #{ordernum,jdbcType=INTEGER},
+      </if>
+      <if test="angle != null">
+        #{angle,jdbcType=REAL},
+      </if>
+      <if test="coordlx != null">
+        #{coordlx,jdbcType=DOUBLE},
+      </if>
+      <if test="coordly != null">
+        #{coordly,jdbcType=DOUBLE},
+      </if>
+      <if test="coordrx != null">
+        #{coordrx,jdbcType=DOUBLE},
+      </if>
+      <if test="coordry != null">
+        #{coordry,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.tianji.dam.domain.TTrackExample" resultType="java.lang.Long">
+    select count(*) from t_track
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_track
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.coordx != null">
+        CoordX = #{record.coordx,jdbcType=DOUBLE},
+      </if>
+      <if test="record.coordy != null">
+        CoordY = #{record.coordy,jdbcType=DOUBLE},
+      </if>
+      <if test="record.latitude != null">
+        Latitude = #{record.latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="record.longitude != null">
+        Longitude = #{record.longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="record.elevation != null">
+        Elevation = #{record.elevation,jdbcType=REAL},
+      </if>
+      <if test="record.timestamp != null">
+        Timestamp = #{record.timestamp,jdbcType=BIGINT},
+      </if>
+      <if test="record.vehicleid != null">
+        VehicleID = #{record.vehicleid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.speed != null">
+        Speed = #{record.speed,jdbcType=REAL},
+      </if>
+      <if test="record.layerid != null">
+        LayerID = #{record.layerid,jdbcType=INTEGER},
+      </if>
+      <if test="record.isforward != null">
+        IsForward = #{record.isforward,jdbcType=INTEGER},
+      </if>
+      <if test="record.isvibrate != null">
+        IsVibrate = #{record.isvibrate,jdbcType=INTEGER},
+      </if>
+      <if test="record.vibratevalue != null">
+        VibrateValue = #{record.vibratevalue,jdbcType=DOUBLE},
+      </if>
+      <if test="record.frequency != null">
+        Frequency = #{record.frequency,jdbcType=DOUBLE},
+      </if>
+      <if test="record.acceleration != null">
+        Acceleration = #{record.acceleration,jdbcType=DOUBLE},
+      </if>
+      <if test="record.amplitude != null">
+        Amplitude = #{record.amplitude,jdbcType=DOUBLE},
+      </if>
+      <if test="record.satellites != null">
+        Satellites = #{record.satellites,jdbcType=INTEGER},
+      </if>
+      <if test="record.zhuangx != null">
+        ZhuangX = #{record.zhuangx,jdbcType=DOUBLE},
+      </if>
+      <if test="record.zhuangy != null">
+        ZhuangY = #{record.zhuangy,jdbcType=DOUBLE},
+      </if>
+      <if test="record.ishistory != null">
+        ishistory = #{record.ishistory,jdbcType=INTEGER},
+      </if>
+      <if test="record.materialname != null">
+        materialname = #{record.materialname,jdbcType=INTEGER},
+      </if>
+      <if test="record.ordernum != null">
+        OrderNum = #{record.ordernum,jdbcType=INTEGER},
+      </if>
+      <if test="record.angle != null">
+        Angle = #{record.angle,jdbcType=REAL},
+      </if>
+      <if test="record.coordlx != null">
+        CoordLX = #{record.coordlx,jdbcType=DOUBLE},
+      </if>
+      <if test="record.coordly != null">
+        CoordLY = #{record.coordly,jdbcType=DOUBLE},
+      </if>
+      <if test="record.coordrx != null">
+        CoordRX = #{record.coordrx,jdbcType=DOUBLE},
+      </if>
+      <if test="record.coordry != null">
+        CoordRY = #{record.coordry,jdbcType=DOUBLE},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_track
+    set id = #{record.id,jdbcType=INTEGER},
+      CoordX = #{record.coordx,jdbcType=DOUBLE},
+      CoordY = #{record.coordy,jdbcType=DOUBLE},
+      Latitude = #{record.latitude,jdbcType=DOUBLE},
+      Longitude = #{record.longitude,jdbcType=DOUBLE},
+      Elevation = #{record.elevation,jdbcType=REAL},
+      Timestamp = #{record.timestamp,jdbcType=BIGINT},
+      VehicleID = #{record.vehicleid,jdbcType=VARCHAR},
+      Speed = #{record.speed,jdbcType=REAL},
+      LayerID = #{record.layerid,jdbcType=INTEGER},
+      IsForward = #{record.isforward,jdbcType=INTEGER},
+      IsVibrate = #{record.isvibrate,jdbcType=INTEGER},
+      VibrateValue = #{record.vibratevalue,jdbcType=DOUBLE},
+      Frequency = #{record.frequency,jdbcType=DOUBLE},
+      Acceleration = #{record.acceleration,jdbcType=DOUBLE},
+      Amplitude = #{record.amplitude,jdbcType=DOUBLE},
+      Satellites = #{record.satellites,jdbcType=INTEGER},
+      ZhuangX = #{record.zhuangx,jdbcType=DOUBLE},
+      ZhuangY = #{record.zhuangy,jdbcType=DOUBLE},
+      ishistory = #{record.ishistory,jdbcType=INTEGER},
+      materialname = #{record.materialname,jdbcType=INTEGER},
+      OrderNum = #{record.ordernum,jdbcType=INTEGER},
+      Angle = #{record.angle,jdbcType=REAL},
+      CoordLX = #{record.coordlx,jdbcType=DOUBLE},
+      CoordLY = #{record.coordly,jdbcType=DOUBLE},
+      CoordRX = #{record.coordrx,jdbcType=DOUBLE},
+      CoordRY = #{record.coordry,jdbcType=DOUBLE}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tianji.dam.domain.TTrack">
+    update t_track
+    <set>
+      <if test="coordx != null">
+        CoordX = #{coordx,jdbcType=DOUBLE},
+      </if>
+      <if test="coordy != null">
+        CoordY = #{coordy,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null">
+        Latitude = #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="longitude != null">
+        Longitude = #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="elevation != null">
+        Elevation = #{elevation,jdbcType=REAL},
+      </if>
+      <if test="timestamp != null">
+        Timestamp = #{timestamp,jdbcType=BIGINT},
+      </if>
+      <if test="vehicleid != null">
+        VehicleID = #{vehicleid,jdbcType=VARCHAR},
+      </if>
+      <if test="speed != null">
+        Speed = #{speed,jdbcType=REAL},
+      </if>
+      <if test="layerid != null">
+        LayerID = #{layerid,jdbcType=INTEGER},
+      </if>
+      <if test="isforward != null">
+        IsForward = #{isforward,jdbcType=INTEGER},
+      </if>
+      <if test="isvibrate != null">
+        IsVibrate = #{isvibrate,jdbcType=INTEGER},
+      </if>
+      <if test="vibratevalue != null">
+        VibrateValue = #{vibratevalue,jdbcType=DOUBLE},
+      </if>
+      <if test="frequency != null">
+        Frequency = #{frequency,jdbcType=DOUBLE},
+      </if>
+      <if test="acceleration != null">
+        Acceleration = #{acceleration,jdbcType=DOUBLE},
+      </if>
+      <if test="amplitude != null">
+        Amplitude = #{amplitude,jdbcType=DOUBLE},
+      </if>
+      <if test="satellites != null">
+        Satellites = #{satellites,jdbcType=INTEGER},
+      </if>
+      <if test="zhuangx != null">
+        ZhuangX = #{zhuangx,jdbcType=DOUBLE},
+      </if>
+      <if test="zhuangy != null">
+        ZhuangY = #{zhuangy,jdbcType=DOUBLE},
+      </if>
+      <if test="ishistory != null">
+        ishistory = #{ishistory,jdbcType=INTEGER},
+      </if>
+      <if test="materialname != null">
+        materialname = #{materialname,jdbcType=INTEGER},
+      </if>
+      <if test="ordernum != null">
+        OrderNum = #{ordernum,jdbcType=INTEGER},
+      </if>
+      <if test="angle != null">
+        Angle = #{angle,jdbcType=REAL},
+      </if>
+      <if test="coordlx != null">
+        CoordLX = #{coordlx,jdbcType=DOUBLE},
+      </if>
+      <if test="coordly != null">
+        CoordLY = #{coordly,jdbcType=DOUBLE},
+      </if>
+      <if test="coordrx != null">
+        CoordRX = #{coordrx,jdbcType=DOUBLE},
+      </if>
+      <if test="coordry != null">
+        CoordRY = #{coordry,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tianji.dam.domain.TTrack">
+    update t_track
+    set CoordX = #{coordx,jdbcType=DOUBLE},
+      CoordY = #{coordy,jdbcType=DOUBLE},
+      Latitude = #{latitude,jdbcType=DOUBLE},
+      Longitude = #{longitude,jdbcType=DOUBLE},
+      Elevation = #{elevation,jdbcType=REAL},
+      Timestamp = #{timestamp,jdbcType=BIGINT},
+      VehicleID = #{vehicleid,jdbcType=VARCHAR},
+      Speed = #{speed,jdbcType=REAL},
+      LayerID = #{layerid,jdbcType=INTEGER},
+      IsForward = #{isforward,jdbcType=INTEGER},
+      IsVibrate = #{isvibrate,jdbcType=INTEGER},
+      VibrateValue = #{vibratevalue,jdbcType=DOUBLE},
+      Frequency = #{frequency,jdbcType=DOUBLE},
+      Acceleration = #{acceleration,jdbcType=DOUBLE},
+      Amplitude = #{amplitude,jdbcType=DOUBLE},
+      Satellites = #{satellites,jdbcType=INTEGER},
+      ZhuangX = #{zhuangx,jdbcType=DOUBLE},
+      ZhuangY = #{zhuangy,jdbcType=DOUBLE},
+      ishistory = #{ishistory,jdbcType=INTEGER},
+      materialname = #{materialname,jdbcType=INTEGER},
+      OrderNum = #{ordernum,jdbcType=INTEGER},
+      Angle = #{angle,jdbcType=REAL},
+      CoordLX = #{coordlx,jdbcType=DOUBLE},
+      CoordLY = #{coordly,jdbcType=DOUBLE},
+      CoordRX = #{coordrx,jdbcType=DOUBLE},
+      CoordRY = #{coordry,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

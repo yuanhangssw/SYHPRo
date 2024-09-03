@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.CarMapper">
+  <resultMap id="BaseResultMap" type="com.tianji.dam.domain.Car">
+      <id column="CarID" jdbcType="INTEGER" property="carID"/>
+      <result column="CarType" jdbcType="VARCHAR" property="carType"/>
+      <result column="AddTime" jdbcType="VARCHAR" property="addTime"/>
+      <result column="DriverID" jdbcType="INTEGER" property="driverID"/>
+      <result column="UpdateTime" jdbcType="VARCHAR" property="updateTime"/>
+      <result column="Remark" jdbcType="VARCHAR" property="remark"/>
+      <result column="status" jdbcType="VARCHAR" property="status"/>
+      <result column="tonnage" jdbcType="DOUBLE" property="tonnage"/>
+      <result column="lunkuan" jdbcType="DOUBLE" property="lunkuan"/>
+      <result column="driver" jdbcType="VARCHAR" property="driver"/>
+      <result column="type" jdbcType="INTEGER" property="type"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+      CarID, CarType, AddTime, DriverID, UpdateTime, Remark,status,tonnage,lunkuan,driver,type
+  </sql>
+  <select id="findCar"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_car
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_car
+    where CarID = #{carID,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_car
+    where CarID = #{carID,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tianji.dam.domain.Car">
+      insert into t_car (CarID, CarType, AddTime,
+      DriverID, UpdateTime, Remark,tonnage,lunkuan,driver,type
+      )
+      values (#{carID,jdbcType=INTEGER}, #{carType,jdbcType=VARCHAR}, #{addTime,jdbcType=VARCHAR},
+      #{driverID,jdbcType=INTEGER}, #{updateTime,jdbcType=VARCHAR},
+      #{remark,jdbcType=VARCHAR},#{tonnage},#{lunkuan},#{driver},#{type}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tianji.dam.domain.Car">
+    insert into t_car
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="carID != null">
+        CarID,
+      </if>
+      <if test="carType != null">
+        CarType,
+      </if>
+      <if test="addTime != null">
+        AddTime,
+      </if>
+      <if test="driverID != null">
+        DriverID,
+      </if>
+      <if test="updateTime != null">
+          UpdateTime,
+      </if>
+        <if test="remark != null">
+            Remark,
+        </if>
+        <if test="status != null">
+            status,
+        </if>
+        <if test="tonnage != null">
+            tonnage,
+        </if>
+        <if test="lunkuan != null">
+            lunkuan,
+        </if>
+        <if test="driver != null">
+            driver,
+        </if>
+        <if test="type != null">
+            type,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="carID != null">
+        #{carID,jdbcType=INTEGER},
+      </if>
+      <if test="carType != null">
+        #{carType,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=VARCHAR},
+      </if>
+      <if test="driverID != null">
+        #{driverID,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+          #{updateTime,jdbcType=VARCHAR},
+      </if>
+        <if test="remark != null">
+            #{remark,jdbcType=VARCHAR},
+        </if>
+        <if test="status != null">
+            #{status},
+        </if>
+        <if test="tonnage != null">
+            #{tonnage},
+        </if>
+        <if test="lunkuan != null">
+            #{lunkuan},
+        </if>
+        <if test="driver != null">
+            #{driver},
+        </if>
+        <if test="type != null">
+            #{type},
+        </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tianji.dam.domain.Car">
+    update t_car
+    <set>
+      <if test="carType != null">
+        CarType = #{carType,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        AddTime = #{addTime,jdbcType=VARCHAR},
+      </if>
+      <if test="driverID != null">
+        DriverID = #{driverID,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        UpdateTime = #{updateTime,jdbcType=VARCHAR},
+      </if>
+        <if test="remark != null">
+            Remark = #{remark,jdbcType=VARCHAR},
+        </if>
+        <if test="status != null">
+            status = #{status,jdbcType=VARCHAR},
+        </if>
+        <if test="tonnage != null">
+            tonnage= #{tonnage},
+        </if>
+        <if test="lunkuan != null">
+            lunkuan= #{lunkuan},
+        </if>
+        <if test="driver != null">
+            driver= #{driver},
+        </if>
+        <if test="type != null">
+            type= #{type},
+        </if>
+    </set>
+    where CarID = #{carID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tianji.dam.domain.Car">
+      update t_car
+      set CarType = #{carType,jdbcType=VARCHAR},
+      AddTime = #{addTime,jdbcType=VARCHAR},
+      DriverID = #{driverID,jdbcType=INTEGER},
+      UpdateTime = #{updateTime,jdbcType=VARCHAR},
+      Remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      tonnage= #{tonnage},
+      lunkuan= #{lunkuan},
+      driver= #{driver},
+      type= #{type}
+      where CarID = #{carID,jdbcType=INTEGER}
+  </update>
+</mapper>

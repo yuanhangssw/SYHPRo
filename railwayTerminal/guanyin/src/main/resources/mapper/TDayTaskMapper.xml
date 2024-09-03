@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.TDayTaskMapper">
+
+    <resultMap type="com.tianji.dam.domain.TDayTask" id="TDayTaskResult">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="beginTime" column="begin_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+
+        <result property="baseEvolution" column="base_evolution"/>
+        <result property="tpStatus" column="tp_status"/>
+        <result property="nyStatus" column="ny_status"/>
+        <result property="ranges" column="ranges"/>
+        <result property="xbegin" column="xbegin"/>
+        <result property="xend" column="xend"/>
+        <result property="ybegin" column="ybegin"/>
+        <result property="yend" column="yend"/>
+        <result property="checkBy" column="check_by"/>
+        <result property="freedom1" column="freedom1"/>
+        <result property="freedom2" column="freedom2"/>
+        <result property="freedom3" column="freedom3"/>
+        <result property="freedom4" column="freedom4"/>
+        <result property="freedom5" column="freedom5"/>
+    </resultMap>
+
+    <sql id="selectTDayTaskVo">
+        select id, title, begin_time, end_time, create_time, create_by,base_evolution, tp_status, ny_status, ranges,
+        xbegin, xend,
+        ybegin, yend, check_by, freedom1, freedom2, freedom3, freedom4, freedom5 from t_day_task
+    </sql>
+
+    <select id="selectTDayTaskList" parameterType="com.tianji.dam.domain.TDayTask" resultMap="TDayTaskResult">
+        <include refid="selectTDayTaskVo"/>
+        <where>
+            <if test="title != null  and title != ''">and title = #{title}</if>
+            <if test="beginTime != null ">and begin_time = #{beginTime}</if>
+            <if test="endTime != null ">and end_time = #{endTime}</if>
+            <if test="tpStatus != null  and tpStatus != ''">and tp_status = #{tpStatus}</if>
+            <if test="nyStatus != null  and nyStatus != ''">and ny_status = #{nyStatus}</if>
+            <if test="xbegin != null  and xbegin != ''">and xbegin = #{xbegin}</if>
+            <if test="checkBy != null  and checkBy != ''">and check_by = #{checkBy}</if>
+            <if test="freedom1 != null  and freedom1 != ''">and freedom1 = #{freedom1}</if>
+        </where>
+    </select>
+
+    <select id="selectTDayTaskById" parameterType="Long" resultMap="TDayTaskResult">
+        <include refid="selectTDayTaskVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTDayTask" parameterType="com.tianji.dam.domain.TDayTask" useGeneratedKeys="true" keyProperty="id">
+        insert into t_day_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="beginTime != null">begin_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="baseEvolution != null">base_evolution,</if>
+            <if test="tpStatus != null">tp_status,</if>
+            <if test="nyStatus != null">ny_status,</if>
+            <if test="ranges != null">ranges,</if>
+            <if test="xbegin != null">xbegin,</if>
+            <if test="xend != null">xend,</if>
+            <if test="ybegin != null">ybegin,</if>
+            <if test="yend != null">yend,</if>
+            <if test="checkBy != null">check_by,</if>
+            <if test="freedom1 != null">freedom1,</if>
+            <if test="freedom2 != null">freedom2,</if>
+            <if test="freedom3 != null">freedom3,</if>
+            <if test="freedom4 != null">freedom4,</if>
+            <if test="freedom5 != null">freedom5</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="beginTime != null">#{beginTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="baseEvolution != null">#{baseEvolution},</if>
+            <if test="tpStatus != null">#{tpStatus},</if>
+            <if test="nyStatus != null">#{nyStatus},</if>
+            <if test="ranges != null">#{ranges},</if>
+            <if test="xbegin != null">#{xbegin},</if>
+            <if test="xend != null">#{xend},</if>
+            <if test="ybegin != null">#{ybegin},</if>
+            <if test="yend != null">#{yend},</if>
+            <if test="checkBy != null">#{checkBy},</if>
+            <if test="freedom1 != null">#{freedom1},</if>
+            <if test="freedom2 != null">#{freedom2},</if>
+            <if test="freedom3 != null">#{freedom3},</if>
+            <if test="freedom4 != null">#{freedom4},</if>
+            <if test="freedom5 != null">#{freedom5}</if>
+        </trim>
+    </insert>
+
+    <update id="updateTDayTask" parameterType="com.tianji.dam.domain.TDayTask">
+        update t_day_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="beginTime != null">begin_time = #{beginTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="baseEvolution != null">base_evolution=#{baseEvolution},</if>
+            <if test="tpStatus != null">tp_status = #{tpStatus},</if>
+            <if test="nyStatus != null">ny_status = #{nyStatus},</if>
+            <if test="ranges != null">ranges = #{ranges},</if>
+            <if test="xbegin != null">xbegin = #{xbegin},</if>
+            <if test="xend != null">xend = #{xend},</if>
+            <if test="ybegin != null">ybegin = #{ybegin},</if>
+            <if test="yend != null">yend = #{yend},</if>
+            <if test="checkBy != null">check_by = #{checkBy},</if>
+            <if test="freedom1 != null">freedom1 = #{freedom1},</if>
+            <if test="freedom2 != null">freedom2 = #{freedom2},</if>
+            <if test="freedom3 != null">freedom3 = #{freedom3},</if>
+            <if test="freedom4 != null">freedom4 = #{freedom4},</if>
+            <if test="freedom5 != null">freedom5 = #{freedom5}</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTDayTaskById" parameterType="Long">
+        delete from t_day_task where id = #{id}
+    </delete>
+
+    <delete id="deleteTDayTaskByIds" parameterType="String">
+        delete from t_day_task where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

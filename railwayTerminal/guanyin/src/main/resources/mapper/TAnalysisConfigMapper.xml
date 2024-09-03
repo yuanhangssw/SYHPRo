@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.TAnalysisConfigMapper">
+
+    <!--查询-->
+    <select id="select" parameterType="com.tianji.dam.domain.TAnalysisConfig" resultType="com.tianji.dam.domain.TAnalysisConfig">
+        select
+        id as id,
+        num as num,
+        speed as speed,
+        rate as rate,
+        `path` as path,
+        x as x,
+        y as y,
+        z as z,
+        four_param_x as fourParamX,
+        four_param_y as fourParamY,
+        four_param_z as fourParamZ,
+        four_param_angle as fourParamAngle,
+        four_param_factor as fourParamFactor,
+        img_height as img_height,
+         img_width as img_width
+        from t_analysis_config where 1=1
+        <include refid="where"/>
+        order by id asc
+    </select>
+    <sql id="where">
+        <if test="id != null and id != 0 ">AND id = #{id}</if>
+        <if test="num != null">AND num = #{num} </if>
+        <if test="speed != null">AND speed = #{speed}  </if>
+        <if test="rate != null">AND rate = #{rate}</if>
+        <if test="x != null">AND x = #{x}</if>
+        <if test="y != null">AND y = #{y}</if>
+        <if test="z != null">AND z = #{z} </if>
+        <if test="fourParamX != null">AND four_param_x = #{fourParamX}  </if>
+        <if test="fourParamY != null">AND four_param_y = #{fourParamY}</if>
+        <if test="fourParamZ != null">AND four_param_z = #{fourParamZ}</if>
+        <if test="fourParamAngle != null">AND four_param_angle = #{fourParamAngle}</if>
+        <if test="fourParamFactor != null">AND four_param_factor = #{fourParamFactor}</if>
+    </sql>
+
+    <!--添加-->
+    <insert id="insert" parameterType="com.tianji.dam.domain.TAnalysisConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into t_analysis_config (
+        <if test="num != null"> num,</if>
+        <if test="speed != null"> speed,</if>
+        <if test="rate != null"> rate ,</if>
+        <if test="path != null and path !=  '' "> `path`,</if>
+        <if test="x != null"> x,</if>
+        <if test="y != null"> y ,</if>
+        <if test="z != null"> z,</if>
+        <if test="fourParamX != null"> four_param_x, </if>
+        <if test="fourParamY != null"> four_param_y ,</if>
+        <if test="fourParamZ != null"> four_param_z ,</if>
+        <if test="fourParamAngle != null"> four_param_angle,</if>
+        <if test="fourParamFactor != null"> four_param_factor</if>
+           <if test="img_height != null"> img_height</if>
+              <if test="img_width != null"> img_width</if>
+        )values(
+        <if test="num != null">#{num}, </if>
+        <if test="speed != null">#{speed},  </if>
+        <if test="rate != null">#{rate},</if>
+        <if test="path != null and path !=  '' ">#{path},</if>
+        <if test="x != null">#{x},</if>
+        <if test="y != null">#{y},</if>
+        <if test="z != null">#{z}, </if>
+        <if test="fourParamX != null">#{fourParamX},  </if>
+        <if test="fourParamY != null">#{fourParamY},</if>
+        <if test="fourParamZ != null">#{fourParamZ},</if>
+        <if test="fourParamAngle != null">#{fourParamAngle},</if>
+        <if test="fourParamFactor != null">#{fourParamFactor},</if>
+        <if test="img_height != null"> #{img_height},</if>
+        <if test="img_width != null"> #{img_width}</if>
+        )
+    </insert>
+    <!--修改-->
+    <update id="update" parameterType="com.tianji.dam.domain.TAnalysisConfig">
+        update t_analysis_config
+        <set>
+            <if test="num != null"> num = #{num}, </if>
+            <if test="speed != null"> speed = #{speed},  </if>
+            <if test="rate != null"> rate = #{rate},</if>
+            <if test="path != null and path !=  '' "> `path` = #{path},</if>
+            <if test="x != null"> x = #{x},</if>
+            <if test="y != null"> y = #{y},</if>
+            <if test="z != null"> z = #{z}, </if>
+            <if test="fourParamX != null"> four_param_x = #{fourParamX},  </if>
+            <if test="fourParamY != null"> four_param_y = #{fourParamY},</if>
+            <if test="fourParamZ != null"> four_param_z = #{fourParamZ},</if>
+            <if test="fourParamAngle != null"> four_param_angle = #{fourParamAngle},</if>
+            <if test="fourParamFactor != null"> four_param_factor = #{fourParamFactor},</if>
+            <if test="img_height != null"> img_height=#{img_height},</if>
+       	 <if test="img_width != null"> img_width =#{img_width}</if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--删除-->
+    <delete id="delete" parameterType="Long">
+        delete from t_analysis_config where id = #{id}
+    </delete>
+    <!--批量删除-->
+    <delete id="deletes" parameterType="Long">
+        delete from t_analysis_config where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.TSpeedWarmingMapper">
+
+    <resultMap type="com.tianji.dam.domain.TSpeedWarming" id="TSpeedWarmingResult">
+        <result property="gid" column="gid"/>
+        <result property="damgid" column="damgid"/>
+        <result property="carid" column="carid"/>
+        <result property="damtitle" column="damtitle"/>
+        <result property="carname" column="carname"/>
+        <result property="normalvalue" column="normalvalue"/>
+        <result property="currentvalue" column="currentvalue"/>
+        <result property="creattime" column="creattime"/>
+        <result property="datatime" column="datatime"/>
+        <result property="begintime" column="begintime"/>
+        <result property="endtime" column="endtime"/>
+        <result property="freedom1" column="freedom1"/>
+        <result property="freedom2" column="freedom2"/>
+        <result property="freedom3" column="freedom3"/>
+        <result property="freedom4" column="freedom4"/>
+        <result property="freedom5" column="freedom5"/>
+    </resultMap>
+
+    <sql id="selectTSpeedWarmingVo">
+        select a.*
+        from t_speed_warming a
+        left join t_car car on a.carid =car.CarID
+    </sql>
+    <select id="selectTSpeedWarmingList" parameterType="com.tianji.dam.domain.TSpeedWarming"
+            resultMap="TSpeedWarmingResult">
+        <include refid="selectTSpeedWarmingVo"/>
+            <if test="freedom2!=null and freedom2 !=''">
+                left join t_damsconstruction td on a.damtitle = td.title
+            </if>
+        <where>
+            <if test="carid != null ">and a.carid = #{carid}</if>
+            <if test="damgid != null  and damgid != ''">and a.damgid = #{damgid}</if>
+            <if test="carname != null  and carname != ''">and car.Remark like concat('%', #{carname}, '%')</if>
+            <if test="normalvalue != null ">and a.normalvalue = #{normalvalue}</if>
+            <if test="currentvalue != null ">and a.currentvalue = #{currentvalue}</if>
+            <if test="freedom1 != null  and freedom1!=''">and a.freedom1 = #{freedom1}</if>
+            <if test="begintime != null  and begintime!=''">and a.datatime &gt; #{begintime}</if>
+            <if test="endtime != null  and endtime!=''">and a.datatime &lt; #{endtime}</if>
+            <if test="freedom2!=null and freedom2 !=''">and td.pid = #{freedom2}</if>
+            <if test="ceng!=null and ceng !=''">and td.engcode = #{ceng}</if>
+            <if test="freedom3 != null and freedom3 != ''">
+                <if test="freedom3 == 1">
+                    and (a.freedom3 = 1 or a.freedom3 is null)
+                </if>
+                <if test="freedom3 != 1">
+                    and a.freedom3 = #{freedom3}
+                </if>
+            </if>
+            <if test="freedom4!=null and freedom4 !=''">and a.freedom4 like concat('%', #{freedom4}, '%')</if>
+            <if test="freedom5!=null and freedom5 !=''">and a.freedom5 = #{freedom5}</if>
+        </where>
+        order by datatime desc
+    </select>
+
+    <select id="selectTSpeedWarmingList2" parameterType="com.tianji.dam.domain.TSpeedWarming"
+            resultMap="TSpeedWarmingResult">
+        <include refid="selectTSpeedWarmingVo"/>
+        <where>
+            <if test="carid != null ">and carid = #{carid}</if>
+            <if test="damtitle != null  and damtitle != ''">and damtitle = #{damtitle}</if>
+            <if test="carname != null  and carname != ''">and carname like concat('%', #{carname}, '%')</if>
+            <if test="normalvalue != null ">and normalvalue = #{normalvalue}</if>
+            <if test="currentvalue != null ">and currentvalue = #{currentvalue}</if>
+        </where>
+        order by datatime desc
+        limit 0,200
+    </select>
+
+
+    <select id="selectTSpeedWarmingByGid" parameterType="String" resultMap="TSpeedWarmingResult">
+        <include refid="selectTSpeedWarmingVo"/>
+        where gid = #{gid}
+    </select>
+    <insert id="insertTSpeedWarming" parameterType="com.tianji.dam.domain.TSpeedWarming">
+        insert into t_speed_warming
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gid != null and gid != ''">gid,</if>
+            <if test="damgid != null">damgid,</if>
+            <if test="carid != null">carid,</if>
+            <if test="damtitle != null">damtitle,</if>
+            <if test="carname != null">carname,</if>
+            <if test="normalvalue != null">normalvalue,</if>
+            <if test="currentvalue != null">currentvalue,</if>
+            <if test="creattime != null">creattime,</if>
+            <if test="datatime != null">datatime,</if>
+            <if test="freedom1 != null">freedom1,</if>
+            <if test="freedom2 != null">freedom2,</if>
+            <if test="freedom3 != null">freedom3,</if>
+            <if test="freedom4 != null">freedom4,</if>
+            <if test="freedom5 != null">freedom5</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gid != null and gid != ''">#{gid},</if>
+            <if test="damgid != null">#{damgid},</if>
+            <if test="carid != null">#{carid},</if>
+            <if test="damtitle != null">#{damtitle},</if>
+            <if test="carname != null">#{carname},</if>
+            <if test="normalvalue != null">#{normalvalue},</if>
+            <if test="currentvalue != null">#{currentvalue},</if>
+            <if test="creattime != null">#{creattime},</if>
+            <if test="datatime != null">#{datatime},</if>
+            <if test="freedom1 != null">#{freedom1},</if>
+            <if test="freedom2 != null">#{freedom2},</if>
+            <if test="freedom3 != null">#{freedom3},</if>
+            <if test="freedom4 != null">#{freedom4},</if>
+            <if test="freedom5 != null">#{freedom5}</if>
+        </trim>
+    </insert>
+
+
+    <update id="updateTSpeedWarming" parameterType="com.tianji.dam.domain.TSpeedWarming">
+        update t_speed_warming
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="damgid != null">damgid = #{damgid},</if>
+            <if test="carid != null">carid = #{carid},</if>
+            <if test="damtitle != null">damtitle = #{damtitle},</if>
+            <if test="carname != null">carname = #{carname},</if>
+            <if test="normalvalue != null">normalvalue = #{normalvalue},</if>
+            <if test="currentvalue != null">currentvalue = #{currentvalue},</if>
+            <if test="creattime != null">creattime = #{creattime},</if>
+            <if test="datatime != null">datatime = #{datatime},</if>
+            <if test="freedom1 != null">freedom1 = #{freedom1},</if>
+            <if test="freedom2 != null">freedom2 = #{freedom2},</if>
+            <if test="freedom3 != null">freedom3 = #{freedom3},</if>
+            <if test="freedom4 != null">freedom4 = #{freedom4},</if>
+            <if test="freedom5 != null">freedom5 = #{freedom5}</if>
+        </trim>
+        where gid = #{gid}
+    </update>
+
+    <delete id="deleteTSpeedWarmingByGid" parameterType="String">
+        delete from t_speed_warming where gid = #{gid}
+    </delete>
+
+    <delete id="deleteTSpeedWarmingByGids" parameterType="String">
+        delete from t_speed_warming where gid in
+        <foreach item="gid" collection="array" open="(" separator="," close=")">
+            #{gid}
+        </foreach>
+    </delete>
+
+    <update id="updateStatus" parameterType="string" >
+        update t_speed_warming set freedom3 = 2 where gid in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

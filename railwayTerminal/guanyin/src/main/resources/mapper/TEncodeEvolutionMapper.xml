@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.dam.mapper.TEncodeEvolutionMapper">
+    
+    <resultMap type="com.tianji.dam.domain.TEncodeEvolution" id="TEncodeEvolutionResult">
+        <result property="gid"    column="gid"    />
+        <result property="areagid"    column="areagid"    />
+        <result property="damgid"    column="damgid"    />
+        <result property="encode"    column="encode"    />
+        <result property="evolution"    column="evolution"    />
+        <result property="normalEvolution"    column="normal_evolution"    />
+        <result property="minEvolution"    column="min_evolution"    />
+        <result property="maxEvolution"    column="max_evolution"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delflag"    column="delflag"    />
+        <result property="freedom1"    column="freedom1"    />
+        <result property="freedom2"    column="freedom2"    />
+        <result property="freedom3"    column="freedom3"    />
+    </resultMap>
+
+    <sql id="selectTEncodeEvolutionVo">
+        select gid, areagid, damgid, encode, evolution, normal_evolution, min_evolution, max_evolution, create_time, update_time, delflag, freedom1, freedom2, freedom3 from t_encode_evolution
+    </sql>
+
+    <select id="selectTEncodeEvolutionList" parameterType="com.tianji.dam.domain.TEncodeEvolution" resultMap="TEncodeEvolutionResult">
+        <include refid="selectTEncodeEvolutionVo"/>
+        <where>  
+            <if test="areagid != null "> and areagid = #{areagid}</if>
+            <if test="damgid != null "> and damgid = #{damgid}</if>
+            <if test="encode != null "> and encode = #{encode}</if>
+            <if test="evolution != null "> and evolution = #{evolution}</if>
+            <if test="normalEvolution != null "> and normal_evolution = #{normalEvolution}</if>
+            <if test="minEvolution != null "> and min_evolution = #{minEvolution}</if>
+            <if test="maxEvolution != null "> and max_evolution = #{maxEvolution}</if>
+            <if test="delflag != null  and delflag != ''"> and delflag = #{delflag}</if>
+            <if test="freedom1 != null  and freedom1 != ''"> and freedom1 = #{freedom1}</if>
+            <if test="freedom2 != null  and freedom2 != ''"> and freedom2 = #{freedom2}</if>
+            <if test="freedom3 != null  and freedom3 != ''"> and freedom3 = #{freedom3}</if>
+        </where>
+    </select>
+    
+    <select id="selectTEncodeEvolutionByGid" parameterType="Long" resultMap="TEncodeEvolutionResult">
+        <include refid="selectTEncodeEvolutionVo"/>
+        where gid = #{gid}
+    </select>
+        
+    <insert id="insertTEncodeEvolution" parameterType="com.tianji.dam.domain.TEncodeEvolution" useGeneratedKeys="true" keyProperty="gid">
+        insert into t_encode_evolution
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="areagid != null">areagid,</if>
+            <if test="damgid != null">damgid,</if>
+            <if test="encode != null">encode,</if>
+            <if test="evolution != null">evolution,</if>
+            <if test="normalEvolution != null">normal_evolution,</if>
+            <if test="minEvolution != null">min_evolution,</if>
+            <if test="maxEvolution != null">max_evolution,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="delflag != null">delflag,</if>
+            <if test="freedom1 != null">freedom1,</if>
+            <if test="freedom2 != null">freedom2,</if>
+            <if test="freedom3 != null">freedom3,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="areagid != null">#{areagid},</if>
+            <if test="damgid != null">#{damgid},</if>
+            <if test="encode != null">#{encode},</if>
+            <if test="evolution != null">#{evolution},</if>
+            <if test="normalEvolution != null">#{normalEvolution},</if>
+            <if test="minEvolution != null">#{minEvolution},</if>
+            <if test="maxEvolution != null">#{maxEvolution},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delflag != null">#{delflag},</if>
+            <if test="freedom1 != null">#{freedom1},</if>
+            <if test="freedom2 != null">#{freedom2},</if>
+            <if test="freedom3 != null">#{freedom3},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTEncodeEvolution" parameterType="com.tianji.dam.domain.TEncodeEvolution">
+        update t_encode_evolution
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="areagid != null">areagid = #{areagid},</if>
+            <if test="damgid != null">damgid = #{damgid},</if>
+            <if test="encode != null">encode = #{encode},</if>
+            <if test="evolution != null">evolution = #{evolution},</if>
+            <if test="normalEvolution != null">normal_evolution = #{normalEvolution},</if>
+            <if test="minEvolution != null">min_evolution = #{minEvolution},</if>
+            <if test="maxEvolution != null">max_evolution = #{maxEvolution},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="delflag != null">delflag = #{delflag},</if>
+            <if test="freedom1 != null">freedom1 = #{freedom1},</if>
+            <if test="freedom2 != null">freedom2 = #{freedom2},</if>
+            <if test="freedom3 != null">freedom3 = #{freedom3},</if>
+        </trim>
+        where gid = #{gid}
+    </update>
+
+    <delete id="deleteTEncodeEvolutionByGid" parameterType="Long">
+        delete from t_encode_evolution where gid = #{gid}
+    </delete>
+
+    <delete id="deleteTEncodeEvolutionByGids" parameterType="String">
+        delete from t_encode_evolution where gid in 
+        <foreach item="gid" collection="array" open="(" separator="," close=")">
+            #{gid}
+        </foreach>
+    </delete>
+</mapper>
